@@ -5,8 +5,16 @@ A ~200-line Python agentic framework. Define agents with a system prompt and too
 ## Install
 
 ```bash
-pip install litellm
-# optional: pip install opentelemetry-sdk opentelemetry-exporter-otlp-proto-grpc
+# From PyPI (once available)
+pip install quark
+
+# From source
+git clone https://gitlab.aws.dev/subshrey/quark
+cd quark
+pip install .
+
+# With OpenTelemetry support
+pip install "quark[otel]"
 ```
 
 ## Usage
