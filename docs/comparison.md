@@ -32,18 +32,30 @@ Everything else is instrumentation, convenience, or safety rails around this cor
 | 7 | Instructor | `instructor` | ~8.8M | 12k |
 | 8 | DSPy | `dspy` | ~6.2M | 33k |
 | 9 | CrewAI | `crewai` | ~5.4M | 45k |
-| 9b | Strands Agents | `strands-agents` | ~5.5M | 5.3k |
-| 10 | Agno | `agno` | ~1.3M | 38k |
-| 11 | AutoGen | `autogen-agentchat` | ~883k | 55k |
-| 12 | Haystack | `haystack-ai` | ~570k | 24k |
-| 13 | smolagents | `smolagents` | ~440k | 26k |
+| 10 | Strands Agents | `strands-agents` | ~5.5M | 5.3k |
+| 11 | Agno | `agno` | ~1.3M | 38k |
+| 12 | AutoGen | `autogen-agentchat` | ~883k | 55k |
+| 13 | Haystack | `haystack-ai` | ~570k | 24k |
+| 14 | smolagents | `smolagents` | ~440k | 26k |
+| 15 | ControlFlow | `controlflow` | ~16k | ~800 |
 
 ---
 
-## Loop Structures
+## Agentic Loop Structures
 
 ### LangChain (AgentExecutor)
 `while self._should_continue(iterations, time_elapsed)`
+
+```mermaid
+flowchart TD
+    A[Start] --> B[agent.plan with intermediate_steps]
+    B -->|AgentFinish| C[Return output]
+    B -->|AgentAction| D[tool.run]
+    D --> E[append to intermediate_steps]
+    E --> F{max_iterations?}
+    F -->|no| B
+    F -->|yes| G[return_stopped_response]
+```
 
 ```python
 intermediate_steps = []
@@ -63,6 +75,17 @@ Stop: `AgentFinish` (parser detects `"Final Answer:"` token), `max_iterations`, 
 ### LangGraph (Pregel)
 `while loop.tick()` — Google Pregel superstep model
 
+```mermaid
+flowchart TD
+    A[Input] --> B[prepare_next_tasks]
+    B -->|no tasks| C[Done]
+    B -->|tasks ready| D[execute tasks concurrently]
+    D --> E[apply_writes to channels]
+    E --> F{recursion limit?}
+    F -->|no| B
+    F -->|yes| G[GraphInterrupt]
+```
+
 ```python
 with SyncPregelLoop(input, nodes=nodes, config=config) as loop:
     runner = PregelRunner(submit=loop.submit, put_writes=loop.put_writes)
@@ -78,6 +101,18 @@ Not a traditional agentic loop — it's a graph execution engine. The "loop" is 
 
 ### OpenAI Agents SDK
 `while True:` with `current_turn` counter
+
+```mermaid
+flowchart TD
+    A[Start] --> B{max_turns?}
+    B -->|yes| C[MaxTurnsExceeded]
+    B -->|no| D[run_single_turn]
+    D -->|FinalOutput| E[Return result]
+    D -->|Handoff| F[switch current_agent]
+    F --> B
+    D -->|RunAgain| B
+    D -->|Interruption| G[Suspend, await approval]
+```
 
 ```python
 while True:
@@ -100,11 +135,13 @@ Stop: `NextStepFinalOutput`, `max_turns` (default 10), guardrail tripwire, inter
 ### PydanticAI
 Graph node traversal — `while not isinstance(node, End)`
 
-```
-UserPromptNode → ModelRequestNode ←──────────────────┐
-                      ↓                               │
-                 CallToolsNode → End(FinalResult)     │
-                      └──→ ModelRequestNode ──────────┘
+```mermaid
+flowchart TD
+    A[UserPromptNode] --> B[ModelRequestNode]
+    B --> C[CallToolsNode]
+    C -->|no tool calls| D[End: FinalResult]
+    C -->|tool calls| E[execute tools in parallel]
+    E -->|append results| B
 ```
 
 ```python
@@ -118,6 +155,18 @@ return current_node.output
 
 ### CrewAI
 `while not isinstance(formatted_answer, AgentFinish)`
+
+```mermaid
+flowchart TD
+    A[Start] --> B{max_iter?}
+    B -->|yes| C[force final LLM call]
+    B -->|no| D[llm.call messages]
+    D --> E[parser.parse raw]
+    E -->|AgentFinish| F[Return output]
+    E -->|AgentAction| G[tools_handler.run]
+    G --> H[append Observation]
+    H --> B
+```
 
 ```python
 while not isinstance(formatted_answer, AgentFinish):
@@ -138,6 +187,17 @@ Stop: `"Final Answer:"` token, `max_iter` (default 20), `result_as_answer=True` 
 ### smolagents
 `while not returned_final_answer and step_number <= max_steps`
 
+```mermaid
+flowchart TD
+    A[Start] --> B{step <= max_steps?}
+    B -->|no| C[_handle_max_steps_reached]
+    B -->|yes| D[_step_stream: LLM + tool exec]
+    D -->|is_final_answer| E[Return output]
+    D -->|not final| F[append ActionStep to memory]
+    F --> G[step_number += 1]
+    G --> B
+```
+
 ```python
 while not returned_final_answer and step_number <= max_steps:
     action_step = ActionStep(step_number=step_number)
@@ -154,6 +214,18 @@ Two agent types share the same outer loop: `CodeAgent` (LLM writes Python) and `
 
 ### DSPy (ReAct)
 `for idx in range(max_iters)` — bounded for loop, not while
+
+```mermaid
+flowchart TD
+    A[Start] --> B[self.react with trajectory]
+    B -->|finish tool| C[self.extract final answer]
+    B -->|ValueError| C
+    B -->|other tool| D[execute tool]
+    D --> E[append to trajectory]
+    E --> F{max_iters?}
+    F -->|no| B
+    F -->|yes| C
+```
 
 ```python
 trajectory = {}
@@ -174,6 +246,18 @@ Unique: DSPy treats the loop as a *program to be compiled* — `self.react` prom
 ### AutoGen (AssistantAgent)
 `for loop_iteration in range(max_tool_iterations)`
 
+```mermaid
+flowchart TD
+    A[on_messages_stream] --> B[call LLM]
+    B -->|text response| C[yield Response]
+    B -->|tool calls| D[asyncio.gather all tools]
+    D --> E{handoff?}
+    E -->|yes| F[yield HandoffMessage]
+    E -->|no| G{max_tool_iterations?}
+    G -->|yes| H[summarize or reflect]
+    G -->|no| B
+```
+
 ```python
 for loop_iteration in range(max_tool_iterations):
     if isinstance(current_model_result.content, str):
@@ -190,6 +274,16 @@ Team level: actor-model. `RoundRobinGroupChatManager` dispatches to next agent i
 
 ### Strands Agents
 Recursive async generator — no `while` loop
+
+```mermaid
+flowchart TD
+    A[event_loop_cycle] --> B[_handle_model_execution]
+    B -->|end_turn| C[yield EventLoopStopEvent]
+    B -->|tool_use| D[_handle_tool_execution]
+    D --> E[yield tool events]
+    E --> F[recurse_event_loop]
+    F --> A
+```
 
 ```python
 async def event_loop_cycle(agent, invocation_state):
@@ -210,6 +304,17 @@ The call stack IS the loop. First-class interrupt/resume — serialize mid-run s
 ### Agno (formerly Phidata)
 `while True:` inside `models/base.py`
 
+```mermaid
+flowchart TD
+    A[Start] --> B[llm.call messages]
+    B --> C{tool_calls?}
+    C -->|no| D[Return final answer]
+    C -->|yes| E[execute tools sequentially]
+    E --> F{pause condition?}
+    F -->|yes| G[Return paused]
+    F -->|no| B
+```
+
 ```python
 while True:
     assistant_msg = llm.call(messages, tools=tools)
@@ -227,6 +332,18 @@ while True:
 
 ### Haystack
 `while exe_context.counter < self.max_agent_steps`
+
+```mermaid
+flowchart TD
+    A[Start] --> B[chat_generator.run]
+    B -->|no tool_call| C[Return text response]
+    B -->|tool_call| D[_tool_invoker.run]
+    D --> E{exit_condition met?}
+    E -->|yes| F[Return]
+    E -->|no| G{max_agent_steps?}
+    G -->|yes| H[Log warning, return]
+    G -->|no| B
+```
 
 ```python
 while exe_context.counter < self.max_agent_steps:
