@@ -1,6 +1,6 @@
 # Providers
 
-Quark is provider-agnostic via [litellm](https://github.com/BerriAI/litellm). Pass any litellm model string to `Agent(model=...)` and set the appropriate API key as an environment variable.
+Quark is provider-agnostic via [litellm](https://github.com/BerriAI/litellm) — 2,600+ models across 140+ providers. Pass any litellm model string to `Agent(model=...)` and set the appropriate API key as an environment variable.
 
 ## OpenAI
 
