@@ -1,0 +1,86 @@
+# Providers
+
+Quark is provider-agnostic via [litellm](https://github.com/BerriAI/litellm). Pass any litellm model string to `Agent(model=...)` and set the appropriate API key as an environment variable.
+
+## OpenAI
+
+```bash
+export OPENAI_API_KEY=sk-...
+```
+
+```python
+agent = Agent(model="gpt-4o")
+agent = Agent(model="gpt-4o-mini")
+agent = Agent(model="o3-mini")
+```
+
+## Anthropic
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+
+```python
+agent = Agent(model="claude-opus-4-6")
+agent = Agent(model="claude-sonnet-4-6")
+agent = Agent(model="claude-haiku-4-5")
+```
+
+## AWS Bedrock
+
+```bash
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+export AWS_REGION_NAME=us-east-1
+```
+
+```python
+agent = Agent(model="bedrock/anthropic.claude-3-5-haiku-20241022-v1:0")
+agent = Agent(model="bedrock/anthropic.claude-3-5-sonnet-20241022-v2:0")
+agent = Agent(model="bedrock/amazon.nova-pro-v1:0")
+```
+
+## Google Gemini
+
+```bash
+export GEMINI_API_KEY=...
+```
+
+```python
+agent = Agent(model="gemini/gemini-2.0-flash")
+agent = Agent(model="gemini/gemini-1.5-pro")
+```
+
+## Ollama (local)
+
+No API key needed. Run Ollama locally first: `ollama serve`
+
+```python
+agent = Agent(model="ollama/llama3")
+agent = Agent(model="ollama/mistral")
+agent = Agent(model="ollama/deepseek-r1")
+```
+
+## Azure OpenAI
+
+```bash
+export AZURE_API_KEY=...
+export AZURE_API_BASE=https://your-resource.openai.azure.com
+export AZURE_API_VERSION=2024-02-01
+```
+
+```python
+agent = Agent(model="azure/gpt-4o")
+```
+
+## Mixing providers in a pipeline
+
+Each agent in a pipeline can use a different provider:
+
+```python
+researcher = Agent(model="gpt-4o", name="researcher")
+critic     = Agent(model="claude-opus-4-6", name="critic")
+editor     = Agent(model="bedrock/anthropic.claude-3-5-haiku-20241022-v1:0", name="editor")
+
+pipeline = researcher >> [critic] >> editor
+```

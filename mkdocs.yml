@@ -1,0 +1,37 @@
+site_name: Quark
+site_description: A ~200-line Python agentic framework
+site_url: https://subshrey.gitlab.io/quark
+repo_url: https://gitlab.aws.dev/subshrey/quark
+repo_name: subshrey/quark
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.inlinehilite
+  - admonition
+  - pymdownx.details
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Getting Started: quickstart.md
+  - Agents: agents.md
+  - Pipelines: pipelines.md
+  - Providers: providers.md
+  - Observability: observability.md
+  - API Reference: reference.md

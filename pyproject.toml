@@ -21,6 +21,8 @@ otel = [
 dev = [
     "pytest>=7.0",
     "pytest-mock>=3.0",
+    "mkdocs>=1.5",
+    "mkdocs-material>=9.0",
 ]
 
 [tool.setuptools]
