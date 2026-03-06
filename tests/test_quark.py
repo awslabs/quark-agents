@@ -162,6 +162,22 @@ class TestWorkflow:
 # ---------------------------------------------------------------------------
 
 class TestAgent:
+    def test_tools_as_list(self):
+        def my_tool(x: str) -> str:
+            """A tool."""
+            return x
+        a = Agent(tools=[my_tool])
+        assert "my_tool" in a.tools
+        assert a.tools["my_tool"] is my_tool
+
+    def test_tools_as_dict(self):
+        def my_tool(x: str) -> str:
+            """A tool."""
+            return x
+        a = Agent(tools={"custom_name": my_tool})
+        assert "custom_name" in a.tools
+        assert a.tools["custom_name"] is my_tool
+
     def test_initial_history_has_system_prompt(self):
         a = Agent(system="You are a bot.")
         assert a.history[0] == {"role": "system", "content": "You are a bot."}

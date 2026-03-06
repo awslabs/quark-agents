@@ -52,7 +52,8 @@ class Agent:
         self.name = name
         self.model = model
         self.max_turns = max_turns
-        self.tools = tools or {}
+        tools = tools or {}
+        self.tools = {fn.__name__: fn for fn in tools} if isinstance(tools, list) else tools
         self.schemas = [_schema(n, fn) for n, fn in self.tools.items()]
         self.history = [{"role": "system", "content": system}]
 

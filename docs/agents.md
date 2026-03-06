@@ -18,7 +18,7 @@ agent = Agent(
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `system` | `str` | `"You are a helpful assistant."` | System prompt |
-| `tools` | `dict[str, callable]` | `{}` | Tools the agent can call |
+| `tools` | `list[callable]` or `dict[str, callable]` | `{}` | Tools the agent can call |
 | `model` | `str` | `"gpt-4o"` | Any litellm model string |
 | `max_turns` | `int` | `10` | Max LLM iterations per `run()` call |
 | `name` | `str` | `"agent"` | Used in traces and pipeline display |
@@ -46,6 +46,24 @@ print()
 
 Tools are plain Python functions. The function name, docstring, and type hints are used to build the tool schema automatically.
 
+Pass tools as a list (name inferred from function) or a dict (name explicit):
+
+```python
+def get_weather(city: str) -> str:
+    """Get current weather for a city."""
+    return f"Sunny, 22°C in {city}"
+
+def search_web(query: str) -> str:
+    """Search the web."""
+    return "..."
+
+# List — simpler, name inferred from function.__name__
+agent = Agent(tools=[get_weather, search_web])
+
+# Dict — explicit names, useful when you want to rename
+agent = Agent(tools={"weather": get_weather, "search": search_web})
+```
+
 ```python
 def calculate_compound_interest(
     principal: float,
@@ -57,7 +75,7 @@ def calculate_compound_interest(
 
 agent = Agent(
     system="You are a financial assistant.",
-    tools={"calculate_compound_interest": calculate_compound_interest},
+    tools=[calculate_compound_interest],
 )
 
 print(agent.run("If I invest $10,000 at 7% for 20 years, how much will I have?"))

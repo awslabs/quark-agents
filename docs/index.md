@@ -1,6 +1,6 @@
 # Quark
 
-A ~200-line Python agentic framework. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
+A ~200-line Python agentic framework named after the smallest known fundamental particles — quarks need gluons to bind them together. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
 
 ```python
 from quark import Agent
@@ -13,15 +13,9 @@ print(agent.run("What is the capital of France?"))
 
 Every major agentic framework — LangChain, CrewAI, AutoGen, LlamaIndex — solves the same core problem: call an LLM, execute tools if requested, loop until done. When you strip them down to their source code, the core loop is identical. The rest is abstraction on top of abstraction.
 
-Quark is the irreducible core. A single file you can read, understand, and own in an afternoon. It is not a toy — it supports streaming, parallel tool execution, multi-agent pipelines, and production-grade OpenTelemetry tracing. But it never does more than you asked for.
+Quark is the irreducible core parts of what makes an agent useful. A single file you can read, understand, and own in an afternoon. It is not a toy — it supports streaming, parallel tool execution, multi-agent pipelines, and production-grade OpenTelemetry tracing. But it never does more than you asked for.
 
-## Why not just use LangChain?
-
-Every major agentic framework reduces to the same ~20-line loop. Quark exposes that loop directly. See the [Framework Comparison](comparison.md) for a source-level analysis of 15 frameworks and why Quark makes the choices it does.
-
-## The name
-
-In particle physics, quarks are the smallest known fundamental constituents of matter. They cannot exist in isolation — they are always bound together by gluons. The name captures two things: the size (minimal, irreducible) and the purpose (binding agents together into something greater).
+See the [Framework Comparison](comparison.md) for a source-level analysis of 15 frameworks and why Quark makes the choices it does.
 
 ## Install
 

@@ -38,10 +38,7 @@ def search_web(query: str) -> str:
 agent = Agent(
     system="You are a helpful assistant with access to weather and search.",
     model="gpt-4o",
-    tools={
-        "get_weather": get_weather,
-        "search_web": search_web,
-    },
+    tools=[get_weather, search_web],   # or dict: {"get_weather": get_weather, ...}
 )
 
 print(agent.run("What's the weather in Tokyo?"))

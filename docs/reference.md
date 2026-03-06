@@ -6,7 +6,7 @@
 Agent(
     *,
     system: str = "You are a helpful assistant.",
-    tools: dict[str, Callable] | None = None,
+    tools: list[Callable] | dict[str, Callable] | None = None,
     model: str = "gpt-4o",
     max_turns: int = 10,
     name: str = "agent",
@@ -20,7 +20,7 @@ LLM-backed agent with tool use, conversation memory, and `>>` chaining support.
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `system` | `str` | `"You are a helpful assistant."` | System prompt sent on every call |
-| `tools` | `dict[str, callable]` | `{}` | Dict mapping tool name to Python callable |
+| `tools` | `list[callable]` or `dict[str, callable]` | `{}` | List (name from `__name__`) or dict (explicit names) |
 | `model` | `str` | `"gpt-4o"` | Any [litellm model string](https://docs.litellm.ai/docs/providers) |
 | `max_turns` | `int` | `10` | Max LLM iterations before returning |
 | `name` | `str` | `"agent"` | Identifier used in traces and pipeline display |
