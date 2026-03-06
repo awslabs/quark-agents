@@ -35,3 +35,4 @@ nav:
   - Providers: providers.md
   - Observability: observability.md
   - API Reference: reference.md
+  - Framework Comparison: comparison.md

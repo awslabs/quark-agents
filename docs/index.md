@@ -15,6 +15,10 @@ Every major agentic framework — LangChain, CrewAI, AutoGen, LlamaIndex — sol
 
 Quark is the irreducible core. A single file you can read, understand, and own in an afternoon. It is not a toy — it supports streaming, parallel tool execution, multi-agent pipelines, and production-grade OpenTelemetry tracing. But it never does more than you asked for.
 
+## Why not just use LangChain?
+
+Every major agentic framework reduces to the same ~20-line loop. Quark exposes that loop directly. See the [Framework Comparison](comparison.md) for a source-level analysis of 15 frameworks and why Quark makes the choices it does.
+
 ## The name
 
 In particle physics, quarks are the smallest known fundamental constituents of matter. They cannot exist in isolation — they are always bound together by gluons. The name captures two things: the size (minimal, irreducible) and the purpose (binding agents together into something greater).
