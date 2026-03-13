@@ -60,75 +60,110 @@ class Agent:
     def __rshift__(self, other):
         return Workflow([self, _wrap(other)])
 
-    def __rrshift__(self, other):       # called when left side has no __rshift__
+    def __rrshift__(self, other):
         return Workflow([_wrap(other), self])
 
     def run(self, user: str) -> str:
         """Send a message and run the agentic loop until a final answer or max_turns."""
         self.history.append({"role": "user", "content": user})
-        with _span(f"invoke_agent {self.name}") as span:
-            _attr(span, "gen_ai.operation.name", "invoke_agent")
-            _attr(span, "gen_ai.agent.name", self.name)
-            _attr(span, "input.value", user)
+        with self._agent_span(user) as span:
             for _ in range(self.max_turns):
-                msg = litellm.completion(model=self.model, messages=self.history,
-                                         tools=self.schemas or None,
-                                         num_retries=3).choices[0].message
-                self.history.append(msg)
-                if not msg.tool_calls:
-                    _attr(span, "output.value", msg.content)
-                    return msg.content
-                def _call(tc):
-                    with _span(f"execute_tool {tc.function.name}") as ts:
-                        _attr(ts, "gen_ai.tool.name", tc.function.name)
-                        _attr(ts, "gen_ai.tool.call.id", tc.id)
-                        _attr(ts, "gen_ai.tool.call.arguments", tc.function.arguments)
-                        try:
-                            result = self.tools[tc.function.name](**json.loads(tc.function.arguments))
-                        except Exception as e:
-                            _attr(ts, "error.type", type(e).__name__)
-                            result = f"Error: {e}"
-                        _attr(ts, "gen_ai.tool.call.result", str(result))
-                        return {"role": "tool", "tool_call_id": tc.id, "content": str(result)}
-                with ThreadPoolExecutor() as ex:
-                    for m in ex.map(_call, msg.tool_calls): self.history.append(m)
-        return msg.content or "max turns reached"
+                content, tool_calls = self._completion()
+                if not tool_calls:
+                    _attr(span, "output.value", content)
+                    return content
+                self._run_tools(tool_calls)
+            _attr(span, "output.value", content)
+            return content or "max turns reached"
 
     def stream(self, user: str) -> Generator:
         """Stream the response token by token, executing any tool calls mid-stream."""
         self.history.append({"role": "user", "content": user})
-        yield from self._stream_turn()
+        with self._agent_span(user) as span:
+            for _ in range(self.max_turns):
+                content, tool_calls = yield from self._stream_completion()
+                if not tool_calls:
+                    _attr(span, "output.value", content)
+                    return
+                self._run_tools(tool_calls)
+            fallback = content or "max turns reached"
+            _attr(span, "output.value", fallback)
+            yield fallback
 
-    def _stream_turn(self) -> Generator:
-        for _ in range(self.max_turns):
-            response = litellm.completion(model=self.model, messages=self.history,
-                                          tools=self.schemas or None,
-                                          stream=True, num_retries=3)
-            content, tool_acc = "", {}
-            for chunk in response:
-                delta = chunk.choices[0].delta
-                if delta.content:
-                    content += delta.content; yield delta.content
-                for tc in delta.tool_calls or []:
-                    i = tc.index
-                    if i not in tool_acc: tool_acc[i] = {"id": "", "name": "", "arguments": ""}
-                    if tc.id: tool_acc[i]["id"] += tc.id
-                    if tc.function:
-                        if tc.function.name: tool_acc[i]["name"] += tc.function.name
-                        if tc.function.arguments: tool_acc[i]["arguments"] += tc.function.arguments
-            if not tool_acc:
-                self.history.append({"role": "assistant", "content": content}); return
-            tool_calls = [{"id": v["id"], "type": "function",
-                           "function": {"name": v["name"], "arguments": v["arguments"]}}
-                          for _, v in sorted(tool_acc.items())]
-            self.history.append({"role": "assistant", "content": content or None,
-                                  "tool_calls": tool_calls})
-            def _call(tc):
-                try:    result = self.tools[tc["function"]["name"]](**json.loads(tc["function"]["arguments"]))
-                except Exception as e: result = f"Error: {e}"
-                return {"role": "tool", "tool_call_id": tc["id"], "content": str(result)}
-            with ThreadPoolExecutor() as ex:
-                for m in ex.map(_call, tool_calls): self.history.append(m)
+    def _agent_span(self, user):
+        """Open an OTel span for an agent invocation."""
+        span_ctx = _span(f"invoke_agent {self.name}")
+        class _SpanSetup:
+            def __enter__(inner):
+                s = span_ctx.__enter__()
+                _attr(s, "gen_ai.operation.name", "invoke_agent")
+                _attr(s, "gen_ai.agent.name", self.name)
+                _attr(s, "input.value", user)
+                return s
+            def __exit__(inner, *args):
+                return span_ctx.__exit__(*args)
+        return _SpanSetup()
+
+    def _completion(self):
+        """Single non-streaming LLM call. Returns (content, tool_calls)."""
+        msg = litellm.completion(model=self.model, messages=self.history,
+                                 tools=self.schemas or None, num_retries=3).choices[0].message
+        self.history.append(msg)
+        return msg.content, msg.tool_calls
+
+    def _stream_completion(self):
+        """Single streaming LLM call. Yields chunks live, returns (content, tool_calls)."""
+        response = litellm.completion(model=self.model, messages=self.history,
+                                      tools=self.schemas or None, stream=True, num_retries=3)
+        content, tool_acc = "", {}
+        for chunk in response:
+            delta = chunk.choices[0].delta
+            if delta.content:
+                content += delta.content
+                yield delta.content
+            for tc in delta.tool_calls or []:
+                i = tc.index
+                if i not in tool_acc:
+                    tool_acc[i] = {"id": "", "name": "", "arguments": ""}
+                if tc.id:
+                    tool_acc[i]["id"] += tc.id
+                if tc.function:
+                    if tc.function.name:
+                        tool_acc[i]["name"] += tc.function.name
+                    if tc.function.arguments:
+                        tool_acc[i]["arguments"] += tc.function.arguments
+
+        if not tool_acc:
+            self.history.append({"role": "assistant", "content": content})
+            return content, None
+
+        tool_calls = [{"id": v["id"], "type": "function",
+                       "function": {"name": v["name"], "arguments": v["arguments"]}}
+                      for _, v in sorted(tool_acc.items())]
+        self.history.append({"role": "assistant", "content": content or None,
+                              "tool_calls": tool_calls})
+        return content, tool_calls
+
+    def _run_tools(self, tool_calls):
+        """Run tool calls in parallel and append results to history."""
+        def _call(tc):
+            name, cid, args = (tc["function"]["name"], tc["id"], tc["function"]["arguments"]) \
+                if isinstance(tc, dict) else (tc.function.name, tc.id, tc.function.arguments)
+            with _span(f"execute_tool {name}") as ts:
+                _attr(ts, "gen_ai.tool.name", name)
+                _attr(ts, "gen_ai.tool.call.id", cid)
+                _attr(ts, "gen_ai.tool.call.arguments", args)
+                try:
+                    result = self.tools[name](**json.loads(args))
+                except Exception as e:
+                    _attr(ts, "error.type", type(e).__name__)
+                    result = f"Error: {e}"
+                _attr(ts, "gen_ai.tool.call.result", str(result))
+                return {"role": "tool", "tool_call_id": cid, "content": str(result)}
+
+        with ThreadPoolExecutor() as ex:
+            for m in ex.map(_call, tool_calls):
+                self.history.append(m)
 
     def reset(self):
         """Clear conversation history, keeping the system prompt."""
@@ -206,9 +241,21 @@ def _attr(span, key, val):
 
 def _schema(name: str, fn: Callable) -> dict:
     """Build an OpenAI-compatible tool schema from a function's type hints and docstring."""
+    import typing
     sig = inspect.signature(fn)
-    type_map = {str: "string", int: "integer", float: "number", bool: "boolean"}
-    properties = {k: {"type": type_map.get(v.annotation, "string")} for k, v in sig.parameters.items()}
+    type_map = {str: "string", int: "integer", float: "number", bool: "boolean",
+                list: "array", dict: "object"}
+
+    def _resolve_type(annotation):
+        # Handle Optional[X] (which is Union[X, None])
+        origin = getattr(annotation, "__origin__", None)
+        if origin is typing.Union:
+            args = [a for a in annotation.__args__ if a is not type(None)]
+            if args:
+                return _resolve_type(args[0])
+        return type_map.get(annotation, "string")
+
+    properties = {k: {"type": _resolve_type(v.annotation)} for k, v in sig.parameters.items()}
     return {"type": "function", "function": {"name": name, "description": fn.__doc__ or "",
         "parameters": {"type": "object", "properties": properties,
             "required": [k for k, v in sig.parameters.items()

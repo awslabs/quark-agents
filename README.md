@@ -17,6 +17,32 @@ pip install .
 pip install "quark[otel]"
 ```
 
+### Install with uv
+
+```bash
+git clone https://gitlab.aws.dev/subshrey/quark
+cd quark
+uv venv
+source .venv/bin/activate
+
+# Core + dev dependencies (pytest, mkdocs)
+uv pip install ".[dev]"
+
+# With OpenTelemetry
+uv pip install ".[dev,otel]"
+
+# With AWS Bedrock support
+uv pip install ".[dev,bedrock]"
+
+# All extras
+uv pip install ".[dev,otel,bedrock]"
+```
+
+> **Note:** Editable installs (`-e`) require `setuptools>=75`. If you see
+> `ModuleNotFoundError: No module named 'setuptools.backends'`, make sure
+> `pyproject.toml` has `requires = ["setuptools>=75"]` under `[build-system]`,
+> or use a non-editable install (`uv pip install ".[dev]"` without `-e`).
+
 ## Usage
 
 ### Single agent
@@ -158,6 +184,14 @@ pytest tests/
 
 # Integration tests (requires API credentials)
 pytest tests/ -m integration
+```
+
+If using uv, prefix with `uv run` to ensure the venv's Python is used (avoids conflicts with conda or system Python):
+
+```bash
+uv run pytest tests/
+uv run pytest tests/ -m "not integration"
+uv run pytest tests/ -m integration
 ```
 
 ## Why Quark?
