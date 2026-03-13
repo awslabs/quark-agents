@@ -78,6 +78,25 @@ class TestSchema:
             pass
         assert _schema("fn", fn)["function"]["description"] == ""
 
+    def test_list_type_mapped(self):
+        def fn(items: list) -> None:
+            pass
+        props = _schema("fn", fn)["function"]["parameters"]["properties"]
+        assert props["items"]["type"] == "array"
+
+    def test_dict_type_mapped(self):
+        def fn(data: dict) -> None:
+            pass
+        props = _schema("fn", fn)["function"]["parameters"]["properties"]
+        assert props["data"]["type"] == "object"
+
+    def test_optional_str_mapped(self):
+        from typing import Optional
+        def fn(name: Optional[str] = None) -> None:
+            pass
+        props = _schema("fn", fn)["function"]["parameters"]["properties"]
+        assert props["name"]["type"] == "string"
+
 
 # ---------------------------------------------------------------------------
 # _run
@@ -311,3 +330,91 @@ def test_integration_workflow_pipeline():
     pipeline = shout >> summarizer
     result = pipeline.run("black holes are fascinating")
     assert len(result.split()) <= 10
+
+@pytest.mark.integration
+def test_integration_multi_tool_agent():
+    """Agent with multiple tools — calculator and weather."""
+
+    def add(a: int, b: int) -> int:
+        """Add two numbers together."""
+        return a + b
+
+    def multiply(a: int, b: int) -> int:
+        """Multiply two numbers together."""
+        return a * b
+
+    def get_weather(city: str) -> str:
+        """Get the current weather for a city."""
+        forecasts = {
+            "paris": "Sunny, 22°C",
+            "london": "Cloudy, 14°C",
+            "tokyo": "Rainy, 18°C",
+        }
+        return forecasts.get(city.lower(), f"No data for {city}")
+
+    agent = Agent(
+        system="You are a helpful assistant with access to a calculator and weather tools. Use them when needed.",
+        model=MODEL,
+        tools={"add": add, "multiply": multiply, "get_weather": get_weather},
+        name="multi-tool-agent",
+    )
+
+    # Test calculator tool
+    result = agent.run("What is 15 + 27?")
+    assert "42" in result
+
+    # Reset and test weather tool
+    agent.reset()
+    result = agent.run("What's the weather in Paris?")
+    assert "sunny" in result.lower() or "22" in result
+
+
+@pytest.mark.integration
+def test_integration_chained_tool_calls():
+    """Agent should handle a prompt that requires multiple tool calls in sequence."""
+
+    def add(a: int, b: int) -> int:
+        """Add two numbers together."""
+        return a + b
+
+    def multiply(a: int, b: int) -> int:
+        """Multiply two numbers together."""
+        return a * b
+
+    agent = Agent(
+        system="You have calculator tools. Use them to compute the answer step by step.",
+        model=MODEL,
+        tools={"add": add, "multiply": multiply},
+        name="calc-agent",
+    )
+
+    result = agent.run("What is (3 + 4) * 5? Use the tools to compute this step by step.")
+    assert "35" in result
+
+
+@pytest.mark.integration
+def test_integration_weather_with_conversion():
+    """Agent must call get_weather (returns °F) then convert to Celsius."""
+
+    def get_weather(city: str) -> str:
+        """Get the current weather for a city. Returns temperature in Fahrenheit."""
+        forecasts = {
+            "paris": "72°F",
+            "london": "57°F",
+            "tokyo": "64°F",
+        }
+        return forecasts.get(city.lower(), f"No data for {city}")
+
+    def fahrenheit_to_celsius(f: float) -> float:
+        """Convert a temperature from Fahrenheit to Celsius."""
+        return round((f - 32) * 5 / 9, 1)
+
+    agent = Agent(
+        system="You have a weather tool that returns temperatures in Fahrenheit and a conversion tool. Always use both tools to answer in Celsius.",
+        model=MODEL,
+        tools={"get_weather": get_weather, "fahrenheit_to_celsius": fahrenheit_to_celsius},
+        name="weather-converter",
+    )
+
+    result = agent.run("What is the temperature in Paris in Celsius?")
+    assert "22" in result  # 72°F = 22.2°C
