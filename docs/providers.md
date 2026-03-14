@@ -73,6 +73,27 @@ export AZURE_API_VERSION=2024-02-01
 agent = Agent(model="azure/gpt-5.4")
 ```
 
+## OpenRouter
+
+Access hundreds of models through a single API key.
+
+```bash
+export OPENROUTER_API_KEY=sk-or-...
+```
+
+```python
+agent = Agent(model="openrouter/x-ai/grok-4.1-fast")
+```
+
+> **Try for free:** OpenRouter has a free auto-router that picks from available free models — no cost, great for testing.
+>
+> ```python
+> agent = Agent(model="openrouter/openrouter/free")
+> print(agent.run("Hello!"))
+> ```
+
+---
+
 ## Mixing providers in a pipeline
 
 Each agent in a pipeline can use a different provider:
