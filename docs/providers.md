@@ -28,6 +28,15 @@ agent = Agent(model="claude-haiku-4-5")
 
 ## AWS Bedrock
 
+**Option 1 — Bearer token (preferred).**
+
+```bash
+export AWS_BEARER_TOKEN_BEDROCK=...
+export AWS_REGION=us-east-1
+```
+
+**Option 2 — Boto3.** Uses boto3's credential chain: env vars, `~/.aws/credentials`, IAM roles, SSO.
+
 ```bash
 export AWS_ACCESS_KEY_ID=...
 export AWS_SECRET_ACCESS_KEY=...
