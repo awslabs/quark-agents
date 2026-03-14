@@ -1,6 +1,6 @@
 # Quark
 
-A ~200-line Python agentic framework. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).
+A <300-line Python agentic framework. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).
 
 ## Install
 

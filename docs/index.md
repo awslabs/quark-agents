@@ -1,6 +1,6 @@
 # Quark
 
-A ~200-line Python agentic framework named after the smallest known fundamental particles — quarks need gluons to bind them together. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
+A <300-line Python agentic framework, named after the smallest known fundamental particles. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
 
 ```python
 from quark import Agent
