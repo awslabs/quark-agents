@@ -71,7 +71,7 @@ class Agent:
                 content, tool_calls = self._completion()
                 if not tool_calls:
                     _attr(span, "output.value", content)
-                    return content
+                    return content or ""
                 self._run_tools(tool_calls)
             _attr(span, "output.value", content)
             return content or "max turns reached"
