@@ -5,7 +5,7 @@ A <300-line Python agentic framework, named after the smallest known fundamental
 ```python
 from quark import Agent
 
-agent = Agent(system="You are a helpful assistant.", model="gpt-4o")
+agent = Agent(system="You are a helpful assistant.", model="gpt-5.4")
 print(agent.run("What is the capital of France?"))
 ```
 

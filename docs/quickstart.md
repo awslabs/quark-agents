@@ -13,7 +13,7 @@ from quark import Agent
 
 agent = Agent(
     system="You are a helpful assistant.",
-    model="gpt-4o",
+    model="gpt-5.4",
 )
 
 print(agent.run("What is the speed of light?"))
@@ -37,7 +37,7 @@ def search_web(query: str) -> str:
 
 agent = Agent(
     system="You are a helpful assistant with access to weather and search.",
-    model="gpt-4o",
+    model="gpt-5.4",
     tools=[get_weather, search_web],   # or dict: {"get_weather": get_weather, ...}
 )
 

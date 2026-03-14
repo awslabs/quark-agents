@@ -52,7 +52,7 @@ from quark import Agent
 
 agent = Agent(
     system="You are a helpful assistant.",
-    model="gpt-4o",  # or any litellm-supported model
+    model="gpt-5.4",  # or any litellm-supported model
     name="assistant",
 )
 
@@ -68,7 +68,7 @@ def get_weather(city: str) -> str:
 
 agent = Agent(
     system="You are a weather assistant.",
-    model="gpt-4o",
+    model="gpt-5.4",
     tools={"get_weather": get_weather},
 )
 
@@ -124,7 +124,7 @@ for chunk in agent.stream("Tell me a story."):
 
 ```python
 # OpenAI
-agent = Agent(model="gpt-4o")
+agent = Agent(model="gpt-5.4")
 
 # Anthropic
 agent = Agent(model="claude-opus-4-6")
@@ -158,7 +158,7 @@ Every `Agent.run()`, `Workflow.run()`, and tool call emits OTel spans. Compatibl
 |-----------|---------|-------------|
 | `system` | `"You are a helpful assistant."` | System prompt |
 | `tools` | `{}` | Dict of `{name: callable}` |
-| `model` | `"gpt-4o"` | Any litellm model string |
+| `model` | `"gpt-5.4"` | Any litellm model string |
 | `max_turns` | `10` | Max LLM iterations per `run()` call |
 | `name` | `"agent"` | Name used in traces and pipeline display |
 

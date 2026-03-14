@@ -48,7 +48,7 @@ class Agent:
     """LLM-backed agent with tool use, conversation memory, and >> chaining support."""
 
     def __init__(self, *, system="You are a helpful assistant.", tools=None,
-                 model="gpt-4o", max_turns=10, name="agent"):
+                 model="gpt-5.4", max_turns=10, name="agent"):
         self.name = name
         self.model = model
         self.max_turns = max_turns

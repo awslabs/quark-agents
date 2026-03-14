@@ -9,7 +9,7 @@ from quark import Agent
 
 agent = Agent(
     system="You are a research assistant.",
-    model="gpt-4o",
+    model="gpt-5.4",
     name="researcher",
     max_turns=10,
 )
@@ -19,7 +19,7 @@ agent = Agent(
 |-----------|------|---------|-------------|
 | `system` | `str` | `"You are a helpful assistant."` | System prompt |
 | `tools` | `list[callable]` or `dict[str, callable]` | `{}` | Tools the agent can call |
-| `model` | `str` | `"gpt-4o"` | Any litellm model string |
+| `model` | `str` | `"gpt-5.4"` | Any [litellm model string](https://docs.litellm.ai/docs/providers) |
 | `max_turns` | `int` | `10` | Max LLM iterations per `run()` call |
 | `name` | `str` | `"agent"` | Used in traces and pipeline display |
 

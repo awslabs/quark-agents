@@ -9,7 +9,7 @@ export OPENAI_API_KEY=sk-...
 ```
 
 ```python
-agent = Agent(model="gpt-4o")
+agent = Agent(model="gpt-5.4")
 agent = Agent(model="gpt-4o-mini")
 agent = Agent(model="o3-mini")
 ```
@@ -70,7 +70,7 @@ export AZURE_API_VERSION=2024-02-01
 ```
 
 ```python
-agent = Agent(model="azure/gpt-4o")
+agent = Agent(model="azure/gpt-5.4")
 ```
 
 ## Mixing providers in a pipeline
@@ -78,7 +78,7 @@ agent = Agent(model="azure/gpt-4o")
 Each agent in a pipeline can use a different provider:
 
 ```python
-researcher = Agent(model="gpt-4o", name="researcher")
+researcher = Agent(model="gpt-5.4", name="researcher")
 critic     = Agent(model="claude-opus-4-6", name="critic")
 editor     = Agent(model="bedrock/anthropic.claude-3-5-haiku-20241022-v1:0", name="editor")
 
