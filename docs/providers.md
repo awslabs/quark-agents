@@ -94,7 +94,7 @@ export OPENROUTER_API_KEY=sk-or-...
 agent = Agent(model="openrouter/x-ai/grok-4.1-fast")
 ```
 
-> **Try for free:** OpenRouter has a free auto-router that picks from available free models — no cost, great for testing.
+> **Try for free:** OpenRouter has a free auto-router that picks from available free models — no cost, great for testing. Free models may be rate-limited; if you hit a 429, try again shortly or switch to a specific free model.
 >
 > ```python
 > agent = Agent(model="openrouter/openrouter/free")
