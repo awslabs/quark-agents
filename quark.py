@@ -209,6 +209,58 @@ class Workflow:
 
 
 # ---------------------------------------------------------------------------
+# Tool decorator
+# ---------------------------------------------------------------------------
+
+def tool(fn=None, *, retries=0, timeout=None):
+    """Decorator making a function pipeline-compatible with >>, OTel tracing, and retries.
+
+    Usage:
+        @tool
+        def fetch(url): ...
+
+        @tool(retries=3, timeout=30)
+        def call_api(query): ...
+    """
+    if fn is None:
+        return lambda f: tool(f, retries=retries, timeout=timeout)
+
+    class _ToolNode:
+        name = fn.__name__
+        __name__ = fn.__name__
+        __doc__ = fn.__doc__
+
+        def __call__(self, *args, **kwargs):
+            return fn(*args, **kwargs)
+
+        def run(self, x):
+            with _span(f"tool {fn.__name__}") as s:
+                _attr(s, "gen_ai.tool.name", fn.__name__)
+                _attr(s, "input.value", str(x))
+                last_exc = None
+                for attempt in range(retries + 1):
+                    try:
+                        if timeout:
+                            with ThreadPoolExecutor(max_workers=1) as ex:
+                                result = ex.submit(fn, x).result(timeout=timeout)
+                        else:
+                            result = fn(x)
+                        if inspect.isawaitable(result):
+                            result = asyncio.run(result)
+                        _attr(s, "gen_ai.tool.call.result", str(result))
+                        return str(result)
+                    except Exception as e:
+                        last_exc = e
+                _attr(s, "error.type", type(last_exc).__name__)
+                raise last_exc
+
+        def __rshift__(self, other): return Workflow([self, _wrap(other)])
+        def __rrshift__(self, other): return Workflow([_wrap(other), self])
+
+    return _ToolNode()
+
+
+# ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 

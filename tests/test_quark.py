@@ -11,7 +11,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, ".")
-from quark import Agent, Workflow, _run, _schema
+from quark import Agent, Workflow, _run, _schema, tool
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +193,73 @@ class TestWorkflow:
         from quark import _wrap
         a = Agent(name="a")
         assert _wrap(a) is a
+
+
+# ---------------------------------------------------------------------------
+# tool decorator
+# ---------------------------------------------------------------------------
+
+class TestTool:
+    def test_basic_pipeline_support(self):
+        @tool
+        def fn(x): return x.upper()
+        w = fn >> Workflow([])
+        assert isinstance(w, Workflow)
+
+    def test_fn_rshift_list(self):
+        @tool
+        def fn(x): return x
+        a = Agent(name="a"); a.run = lambda u: u
+        b = Agent(name="b"); b.run = lambda u: u
+        pipeline = fn >> [a, b]
+        assert isinstance(pipeline, Workflow)
+
+    def test_run_returns_string(self):
+        @tool
+        def fn(x): return 42
+        assert fn.run("anything") == "42"
+
+    def test_retries_on_failure(self):
+        attempts = []
+        @tool(retries=2)
+        def flaky(x):
+            attempts.append(1)
+            if len(attempts) < 3:
+                raise ValueError("not yet")
+            return "ok"
+        assert flaky.run("x") == "ok"
+        assert len(attempts) == 3
+
+    def test_raises_after_retries_exhausted(self):
+        @tool(retries=1)
+        def always_fails(x):
+            raise ValueError("boom")
+        with pytest.raises(ValueError):
+            always_fails.run("x")
+
+    def test_timeout_raises(self):
+        import time
+        @tool(timeout=1)
+        def slow(x):
+            time.sleep(5)
+            return "never"
+        with pytest.raises(Exception):
+            slow.run("x")
+
+    def test_still_callable_as_function(self):
+        @tool
+        def double(x): return int(x) * 2
+        assert double(21) == 42
+
+    def test_decorator_with_no_args(self):
+        @tool
+        def fn(x): return x
+        assert fn.run("hello") == "hello"
+
+    def test_decorator_with_args(self):
+        @tool(retries=0)
+        def fn(x): return x
+        assert fn.run("hello") == "hello"
 
 
 # ---------------------------------------------------------------------------

@@ -109,7 +109,43 @@ result = clean(truncate(raw_text))
 ```
 
 !!! note
-    `fn >> fn` (two plain functions, no agent) is not supported via `>>` — just call them normally: `fn2(fn1(x))`. The `>>` operator is for connecting LLM agents into pipelines, not for general function composition.
+    `fn >> fn` (two plain functions, no agent) is not supported via `>>` — just call them normally: `fn2(fn1(x))`. Use `@tool` (see below) if you need a plain function at the start of a chain before a list.
+
+## @tool decorator
+
+Plain functions work in pipelines without any decoration. But wrapping with `@tool` unlocks three additional features:
+
+| Feature | Plain function | `@tool` |
+|---------|---------------|---------|
+| `>>` with agents | ✓ | ✓ |
+| `fn >> [a, b]` (list anchor) | ✗ | ✓ |
+| OTel span in traces | ✗ | ✓ |
+| Retries on failure | ✗ | ✓ |
+| Timeout | ✗ | ✓ |
+
+```python
+from quark import tool
+
+# Basic — just adds >> support and OTel tracing
+@tool
+def fetch(url: str) -> str:
+    return requests.get(url).text
+
+# With retries and timeout
+@tool(retries=3, timeout=30)
+def call_api(query: str) -> str:
+    return requests.get(f"https://api.example.com?q={query}").text
+
+# Now fn >> [list] works
+pipeline = fetch >> [summarizer, critic] >> editor
+pipeline.run("https://example.com/article")
+```
+
+`@tool` functions are still callable as regular Python functions:
+
+```python
+text = fetch("https://example.com")   # works normally outside a pipeline
+```
 
 ## Async steps
 
