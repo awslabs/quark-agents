@@ -107,14 +107,15 @@ class Agent:
 
     def _completion(self, span=None):
         """Single non-streaming LLM call. Returns (content, list[dict] tool_calls)."""
-        response = litellm.completion(model=self.model, messages=self.history,
-                                      tools=self.schemas or None, num_retries=3)
-        msg = response.choices[0].message
+        with _span(f"chat {self.model}") as cs:
+            _attr(cs, "gen_ai.request.model", self.model)
+            response = litellm.completion(model=self.model, messages=self.history,
+                                          tools=self.schemas or None, num_retries=3)
+            msg = response.choices[0].message
+            usage = getattr(response, "usage", None)
+            _attr(cs, "gen_ai.usage.input_tokens", getattr(usage, "prompt_tokens", None))
+            _attr(cs, "gen_ai.usage.output_tokens", getattr(usage, "completion_tokens", None))
         self.history.append(msg)
-        usage = getattr(response, "usage", None)
-        _attr(span, "gen_ai.request.model", self.model)
-        _attr(span, "gen_ai.usage.input_tokens", getattr(usage, "prompt_tokens", None))
-        _attr(span, "gen_ai.usage.output_tokens", getattr(usage, "completion_tokens", None))
         tool_calls = [{"id": tc.id, "type": "function",
                        "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
                       for tc in (msg.tool_calls or [])]
