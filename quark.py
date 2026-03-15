@@ -6,10 +6,6 @@ from contextlib import contextmanager
 from typing import Callable, Generator
 import litellm
 
-# ---------------------------------------------------------------------------
-# Observability — auto-enabled when OTEL_EXPORTER_OTLP_ENDPOINT is set
-# ---------------------------------------------------------------------------
-
 try:
     from opentelemetry import trace
     from opentelemetry.trace import SpanKind
@@ -46,10 +42,6 @@ def _attr(span, key, val):
         except Exception: pass
 
 
-# ---------------------------------------------------------------------------
-# Agent
-# ---------------------------------------------------------------------------
-
 class Agent:
     """LLM-backed agent with tool use, conversation memory, and >> chaining support."""
 
@@ -74,7 +66,7 @@ class Agent:
         self.history.append({"role": "user", "content": user})
         with self._agent_span(user) as span:
             for _ in range(self.max_turns):
-                content, tool_calls = self._completion(span)
+                content, tool_calls = self._completion()
                 if not tool_calls:
                     _attr(span, "output.value", content)
                     return content or ""
@@ -105,7 +97,7 @@ class Agent:
             _attr(s, "input.value", user)
             yield s
 
-    def _completion(self, span=None):
+    def _completion(self):
         """Single non-streaming LLM call. Returns (content, list[dict] tool_calls)."""
         with _span(f"chat {self.model}") as cs:
             _attr(cs, "gen_ai.request.model", self.model)
@@ -176,25 +168,16 @@ class Agent:
         self.history = [self.history[0]]
 
 
-# ---------------------------------------------------------------------------
-# Workflow
-# ---------------------------------------------------------------------------
-
 class Workflow:
     """Sequential pipeline of steps built by >>; a list-within runs those nodes in parallel."""
 
     def __init__(self, steps, name=None):
         self.steps = [s if isinstance(s, list) else _wrap(s) for s in steps]
-        self.name = name or self._infer_name()
-
-    def _infer_name(self):
-        def _name(s):
-            if isinstance(s, list):
-                return f"[{', '.join(str(getattr(n, 'name', '?')) for n in s)}]"
-            if isinstance(s, Workflow):
-                return f"({s.name})"
-            return str(getattr(s, "name", "?"))
-        return " >> ".join(_name(s) for s in self.steps)
+        self.name = name or " >> ".join(
+            f"[{', '.join(str(getattr(n,'name','?'))for n in s)}]" if isinstance(s, list)
+            else f"({s.name})" if isinstance(s, Workflow)
+            else str(getattr(s, "name", "?"))
+            for s in self.steps)
 
     def __rshift__(self, other):
         return Workflow(self.steps + [_wrap(other)])
@@ -213,8 +196,7 @@ class Workflow:
                         results = list(ex.map(lambda s: _run(s, x), step))
                     feedback = "\n\n---\n\n".join(
                         f"[{getattr(s, 'name', getattr(s, '__name__', str(s)))}]:\n{r}"
-                        for s, r in zip(step, results)
-                    )
+                        for s, r in zip(step, results))
                     x = f"[original]:\n{x}\n\n---\n\n{feedback}"
                 else:
                     x = _run(step, x)
@@ -222,20 +204,8 @@ class Workflow:
             return x
 
 
-# ---------------------------------------------------------------------------
-# Tool decorator
-# ---------------------------------------------------------------------------
-
 def tool(fn=None, *, retries=0, timeout=None):
-    """Decorator making a function pipeline-compatible with >>, OTel tracing, and retries.
-
-    Usage:
-        @tool
-        def fetch(url): ...
-
-        @tool(retries=3, timeout=30)
-        def call_api(query): ...
-    """
+    """Decorator making a function pipeline-compatible with >>, OTel tracing, and retries."""
     if fn is None:
         return lambda f: tool(f, retries=retries, timeout=timeout)
 
@@ -273,10 +243,6 @@ def tool(fn=None, *, retries=0, timeout=None):
 
     return _ToolNode()
 
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
 
 def _wrap(fn):
     """Wrap a plain callable as a pipeline-compatible node with >> support."""
