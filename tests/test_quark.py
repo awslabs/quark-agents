@@ -117,6 +117,11 @@ class TestRun:
         fn = lambda x: 42
         assert _run(fn, "anything") == "42"
 
+    def test_handles_async_function(self):
+        import asyncio
+        async def async_fn(x): return f"async: {x}"
+        assert _run(async_fn, "hello") == "async: hello"
+
 
 # ---------------------------------------------------------------------------
 # Workflow
@@ -175,6 +180,20 @@ class TestWorkflow:
         w = Workflow([lambda x: x.upper()])
         assert w.run("hello") == "HELLO"
 
+    def test_agent_rshift_list_creates_parallel_step(self):
+        a = Agent(name="a")
+        b = Agent(name="b")
+        c = Agent(name="c")
+        w = a >> [b, c]
+        assert isinstance(w, Workflow)
+        assert w.steps[0] is a
+        assert w.steps[1] == [b, c]
+
+    def test_wrap_returns_node_unchanged(self):
+        from quark import _wrap
+        a = Agent(name="a")
+        assert _wrap(a) is a
+
 
 # ---------------------------------------------------------------------------
 # Agent (unit — mocked LLM)
@@ -229,6 +248,13 @@ class TestAgent:
         a = Agent()
         result = a.run("say hello")
         assert result == "hello world"
+
+    @patch("quark.litellm.completion")
+    def test_run_returns_empty_string_when_content_is_none(self, mock_completion):
+        mock_completion.return_value = _mock_response(content=None)
+        a = Agent()
+        result = a.run("say hello")
+        assert result == ""
 
     @patch("quark.litellm.completion")
     def test_run_appends_user_and_assistant_to_history(self, mock_completion):

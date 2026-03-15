@@ -1,7 +1,8 @@
-"""Quark — a ~200-line Python agentic framework. Provider-agnostic via litellm."""
+"""Quark — a <300-line Python agentic framework. Provider-agnostic via litellm."""
 
-import json, inspect, os
+import asyncio, json, inspect, os, typing
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
 from typing import Callable, Generator
 import litellm
 
@@ -11,7 +12,7 @@ import litellm
 
 try:
     from opentelemetry import trace
-    from opentelemetry.trace import SpanKind, StatusCode
+    from opentelemetry.trace import SpanKind
     from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.trace.export import BatchSpanProcessor
     from opentelemetry.sdk.resources import Resource
@@ -27,17 +28,23 @@ try:
 
     _tracer = trace.get_tracer("quark")
 except ImportError:
-    from contextlib import contextmanager
     class _NoOp:
         @contextmanager
         def start_as_current_span(self, *a, **kw): yield None
     _tracer = _NoOp()
-    SpanKind = StatusCode = None
+    SpanKind = None
 
 
 def _span(name):
     """Start an OTel span."""
     return _tracer.start_as_current_span(name, kind=getattr(SpanKind, "INTERNAL", None))
+
+
+def _attr(span, key, val):
+    """Set a span attribute safely."""
+    if span and val is not None:
+        try: span.set_attribute(key, val)
+        except Exception: pass
 
 
 # ---------------------------------------------------------------------------
@@ -90,26 +97,24 @@ class Agent:
             _attr(span, "output.value", fallback)
             yield fallback
 
+    @contextmanager
     def _agent_span(self, user):
         """Open an OTel span for an agent invocation."""
-        span_ctx = _span(f"invoke_agent {self.name}")
-        class _SpanSetup:
-            def __enter__(inner):
-                s = span_ctx.__enter__()
-                _attr(s, "gen_ai.operation.name", "invoke_agent")
-                _attr(s, "gen_ai.agent.name", self.name)
-                _attr(s, "input.value", user)
-                return s
-            def __exit__(inner, *args):
-                return span_ctx.__exit__(*args)
-        return _SpanSetup()
+        with _span(f"invoke_agent {self.name}") as s:
+            _attr(s, "gen_ai.operation.name", "invoke_agent")
+            _attr(s, "gen_ai.agent.name", self.name)
+            _attr(s, "input.value", user)
+            yield s
 
     def _completion(self):
-        """Single non-streaming LLM call. Returns (content, tool_calls)."""
+        """Single non-streaming LLM call. Returns (content, list[dict] tool_calls)."""
         msg = litellm.completion(model=self.model, messages=self.history,
                                  tools=self.schemas or None, num_retries=3).choices[0].message
         self.history.append(msg)
-        return msg.content, msg.tool_calls
+        tool_calls = [{"id": tc.id, "type": "function",
+                       "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
+                      for tc in (msg.tool_calls or [])]
+        return msg.content, tool_calls or None
 
     def _stream_completion(self):
         """Single streaming LLM call. Yields chunks live, returns (content, tool_calls)."""
@@ -125,13 +130,10 @@ class Agent:
                 i = tc.index
                 if i not in tool_acc:
                     tool_acc[i] = {"id": "", "name": "", "arguments": ""}
-                if tc.id:
-                    tool_acc[i]["id"] += tc.id
+                if tc.id: tool_acc[i]["id"] += tc.id
                 if tc.function:
-                    if tc.function.name:
-                        tool_acc[i]["name"] += tc.function.name
-                    if tc.function.arguments:
-                        tool_acc[i]["arguments"] += tc.function.arguments
+                    if tc.function.name: tool_acc[i]["name"] += tc.function.name
+                    if tc.function.arguments: tool_acc[i]["arguments"] += tc.function.arguments
 
         if not tool_acc:
             self.history.append({"role": "assistant", "content": content})
@@ -147,8 +149,7 @@ class Agent:
     def _run_tools(self, tool_calls):
         """Run tool calls in parallel and append results to history."""
         def _call(tc):
-            name, cid, args = (tc["function"]["name"], tc["id"], tc["function"]["arguments"]) \
-                if isinstance(tc, dict) else (tc.function.name, tc.id, tc.function.arguments)
+            name, cid, args = tc["function"]["name"], tc["id"], tc["function"]["arguments"]
             with _span(f"execute_tool {name}") as ts:
                 _attr(ts, "gen_ai.tool.name", name)
                 _attr(ts, "gen_ai.tool.call.id", cid)
@@ -178,7 +179,7 @@ class Workflow:
     """Sequential pipeline of steps built by >>; a list-within runs those nodes in parallel."""
 
     def __init__(self, steps, name="workflow"):
-        self.steps = [_wrap(s) if callable(s) and not hasattr(s, "run") else s for s in steps]
+        self.steps = [s if isinstance(s, list) else _wrap(s) for s in steps]
         self.name = name
 
     def __rshift__(self, other):
@@ -213,7 +214,7 @@ class Workflow:
 
 def _wrap(fn):
     """Wrap a plain callable as a pipeline-compatible node with >> support."""
-    if hasattr(fn, "run") or hasattr(fn, "__rshift__"):
+    if isinstance(fn, list) or hasattr(fn, "run") or hasattr(fn, "__rshift__"):
         return fn
     class _FnNode:
         name = getattr(fn, "__name__", str(fn))
@@ -225,34 +226,23 @@ def _wrap(fn):
 
 def _run(node, x):
     """Dispatch a single step; handles sync, async, and plain callables transparently."""
-    import asyncio, inspect
     result = node.run(x) if hasattr(node, "run") else node(x)
     if inspect.isawaitable(result):
         result = asyncio.run(result)
     return str(result)
 
 
-def _attr(span, key, val):
-    """Set a span attribute safely."""
-    if span and val is not None:
-        try: span.set_attribute(key, val)
-        except Exception: pass
-
-
 def _schema(name: str, fn: Callable) -> dict:
     """Build an OpenAI-compatible tool schema from a function's type hints and docstring."""
-    import typing
     sig = inspect.signature(fn)
     type_map = {str: "string", int: "integer", float: "number", bool: "boolean",
                 list: "array", dict: "object"}
 
     def _resolve_type(annotation):
-        # Handle Optional[X] (which is Union[X, None])
         origin = getattr(annotation, "__origin__", None)
         if origin is typing.Union:
             args = [a for a in annotation.__args__ if a is not type(None)]
-            if args:
-                return _resolve_type(args[0])
+            if args: return _resolve_type(args[0])
         return type_map.get(annotation, "string")
 
     properties = {k: {"type": _resolve_type(v.annotation)} for k, v in sig.parameters.items()}
