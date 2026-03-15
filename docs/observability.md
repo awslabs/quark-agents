@@ -54,7 +54,7 @@ The fastest way to visualize traces locally:
 ```bash
 docker run -d --name jaeger \
   -p 16686:16686 \
-  -p 4317:4317 \
+  -p 4318:4318 \
   jaegertracing/all-in-one
 ```
 
@@ -62,16 +62,16 @@ Open [http://localhost:16686](http://localhost:16686), select `my-app` from the 
 
 ## Backends
 
-Quark emits standard OTLP — compatible with any backend:
+Quark uses OTLP over **HTTP** — compatible with all major backends. Set `OTEL_EXPORTER_OTLP_HEADERS` for auth.
 
-| Backend | Endpoint | Auth |
-|---------|----------|------|
-| Jaeger | `http://localhost:4317` | None |
-| Honeycomb | `https://api.honeycomb.io` | `x-honeycomb-team` header |
-| Grafana Tempo | `https://tempo.grafana.net/otlp` | Bearer token |
-| Datadog | `https://trace.agent.datadoghq.com` | `DD-API-KEY` header |
-| New Relic | `https://otlp.nr-data.net:4317` | `api-key` header |
-| Langfuse | `https://cloud.langfuse.com/api/public/otel` | Basic auth |
+| Backend | `OTEL_EXPORTER_OTLP_ENDPOINT` | Auth header |
+|---------|-------------------------------|-------------|
+| Jaeger (local) | `http://localhost:4318` | None |
+| Langfuse | `https://cloud.langfuse.com/api/public/otel` | `Authorization=Basic <base64(pk:sk)>` |
+| Honeycomb | `https://api.honeycomb.io` | `x-honeycomb-team=YOUR_KEY` |
+| Grafana Tempo | `https://tempo-prod.grafana.net/otlp` | `Authorization=Basic <token>` |
+| Datadog | `https://trace.agent.datadoghq.com` | `DD-API-KEY=YOUR_KEY` |
+| New Relic | `https://otlp.nr-data.net` | `api-key=YOUR_KEY` |
 | Arize Phoenix | `http://localhost:6006/v1/traces` | None |
 
 ## Disable tracing

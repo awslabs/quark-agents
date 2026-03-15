@@ -19,10 +19,11 @@ try:
 
     _endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
     if _endpoint:
-        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
         _resource = Resource.create({"service.name": os.getenv("OTEL_SERVICE_NAME", "quark")})
         _provider = TracerProvider(resource=_resource)
         _provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=_endpoint)))
+        # OTEL_EXPORTER_OTLP_HEADERS is read automatically by OTLPSpanExporter
         trace.set_tracer_provider(_provider)
         litellm.callbacks = ["otel"]
 
@@ -178,9 +179,18 @@ class Agent:
 class Workflow:
     """Sequential pipeline of steps built by >>; a list-within runs those nodes in parallel."""
 
-    def __init__(self, steps, name="workflow"):
+    def __init__(self, steps, name=None):
         self.steps = [s if isinstance(s, list) else _wrap(s) for s in steps]
-        self.name = name
+        self.name = name or self._infer_name()
+
+    def _infer_name(self):
+        def _name(s):
+            if isinstance(s, list):
+                return f"[{', '.join(str(getattr(n, 'name', '?')) for n in s)}]"
+            if isinstance(s, Workflow):
+                return f"({s.name})"
+            return str(getattr(s, "name", "?"))
+        return " >> ".join(_name(s) for s in self.steps)
 
     def __rshift__(self, other):
         return Workflow(self.steps + [_wrap(other)])

@@ -170,7 +170,7 @@ class TestWorkflow:
         assert "original input" in result
 
     def test_workflow_as_step_in_another_workflow(self):
-        inner = MagicMock(spec=Workflow); inner.run.return_value = "inner_out"
+        inner = MagicMock(spec=Workflow); inner.run.return_value = "inner_out"; inner.name = "inner"
         outer = Workflow([inner])
         result = outer.run("start")
         inner.run.assert_called_once_with("start")
