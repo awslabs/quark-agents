@@ -23,9 +23,7 @@ try:
         _resource = Resource.create({"service.name": os.getenv("OTEL_SERVICE_NAME", "quark")})
         _provider = TracerProvider(resource=_resource)
         _provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=_endpoint)))
-        # OTEL_EXPORTER_OTLP_HEADERS is read automatically by OTLPSpanExporter
         trace.set_tracer_provider(_provider)
-        litellm.callbacks = ["otel"]
 
     _tracer = trace.get_tracer("quark")
 except ImportError:
@@ -76,7 +74,7 @@ class Agent:
         self.history.append({"role": "user", "content": user})
         with self._agent_span(user) as span:
             for _ in range(self.max_turns):
-                content, tool_calls = self._completion()
+                content, tool_calls = self._completion(span)
                 if not tool_calls:
                     _attr(span, "output.value", content)
                     return content or ""
@@ -107,11 +105,16 @@ class Agent:
             _attr(s, "input.value", user)
             yield s
 
-    def _completion(self):
+    def _completion(self, span=None):
         """Single non-streaming LLM call. Returns (content, list[dict] tool_calls)."""
-        msg = litellm.completion(model=self.model, messages=self.history,
-                                 tools=self.schemas or None, num_retries=3).choices[0].message
+        response = litellm.completion(model=self.model, messages=self.history,
+                                      tools=self.schemas or None, num_retries=3)
+        msg = response.choices[0].message
         self.history.append(msg)
+        usage = getattr(response, "usage", None)
+        _attr(span, "gen_ai.request.model", self.model)
+        _attr(span, "gen_ai.usage.input_tokens", getattr(usage, "prompt_tokens", None))
+        _attr(span, "gen_ai.usage.output_tokens", getattr(usage, "completion_tokens", None))
         tool_calls = [{"id": tc.id, "type": "function",
                        "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
                       for tc in (msg.tool_calls or [])]
