@@ -27,9 +27,9 @@ Everything else is instrumentation, convenience, or safety rails around this cor
 | 2 | LangGraph | `langgraph` | ~39M | 26k | 19,773 | ~70x |
 | 3 | OpenAI Agents SDK | `openai-agents` | ~14M | 19k | 51,437 | ~180x |
 | 4 | Pydantic AI | `pydantic-ai` | ~13M | 15k | 55,760 | ~200x |
-| 5 | Prefect | `prefect` | ~10M | 22k | — | — |
+| 5 | Prefect | `prefect` | ~10M | 22k | 284,995 | ~1000x |
 | 6 | LlamaIndex | `llama-index` | ~9.5M | 47k | 76,395 | ~270x |
-| 7 | Instructor | `instructor` | ~8.8M | 12k | — | — |
+| 7 | Instructor | `instructor` | ~8.8M | 12k | 19,875 | ~70x |
 | 8 | DSPy | `dspy` | ~6.2M | 33k | 26,290 | ~90x |
 | 9 | CrewAI | `crewai` | ~5.4M | 45k | 96,485 | ~340x |
 | 10 | Strands Agents | `strands-agents` | ~5.5M | 5.3k | 34,729 | ~120x |
@@ -37,7 +37,7 @@ Everything else is instrumentation, convenience, or safety rails around this cor
 | 12 | AutoGen | `autogen-agentchat` | ~883k | 55k | 11,085 | ~40x |
 | 13 | Haystack | `haystack-ai` | ~570k | 24k | 54,740 | ~190x |
 | 14 | smolagents | `smolagents` | ~440k | 26k | 13,082 | ~46x |
-| 15 | ControlFlow | `controlflow` | ~16k | ~800 | — | — |
+| 15 | ControlFlow | `controlflow` | ~16k | ~800 | 8,818 | ~30x |
 | — | **Quark** | `quark` (pending) | — | — | **284** | **1x** |
 
 ---
