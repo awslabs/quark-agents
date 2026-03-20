@@ -10,6 +10,9 @@ theme:
     - scheme: slate
       primary: deep purple
       accent: purple
+  icon:
+    logo: fontawesome/solid/atom
+  favicon: https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/atom.svg
   features:
     - navigation.tabs
     - navigation.sections

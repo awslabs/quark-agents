@@ -19,25 +19,26 @@ Everything else is instrumentation, convenience, or safety rails around this cor
 
 ## Frameworks Ranked by Monthly PyPI Downloads
 
-> Data from pypistats.org, March 2026. Includes CI/CD, mirrors, and transitive deps.
+> Data from pypistats.org, March 2026. Source lines measured from each framework's GitHub main branch (March 2026), excluding tests, docs, and examples.
 
-| Rank | Framework | PyPI Package | Monthly Downloads | GitHub Stars |
-|------|-----------|-------------|-------------------|--------------|
-| 1 | LangChain | `langchain` | ~223M | 128k |
-| 2 | LangGraph | `langgraph` | ~39M | 26k |
-| 3 | OpenAI Agents SDK | `openai-agents` | ~14M | 19k |
-| 4 | Pydantic AI | `pydantic-ai` | ~13M | 15k |
-| 5 | Prefect | `prefect` | ~10M | 22k |
-| 6 | LlamaIndex | `llama-index` | ~9.5M | 47k |
-| 7 | Instructor | `instructor` | ~8.8M | 12k |
-| 8 | DSPy | `dspy` | ~6.2M | 33k |
-| 9 | CrewAI | `crewai` | ~5.4M | 45k |
-| 10 | Strands Agents | `strands-agents` | ~5.5M | 5.3k |
-| 11 | Agno | `agno` | ~1.3M | 38k |
-| 12 | AutoGen | `autogen-agentchat` | ~883k | 55k |
-| 13 | Haystack | `haystack-ai` | ~570k | 24k |
-| 14 | smolagents | `smolagents` | ~440k | 26k |
-| 15 | ControlFlow | `controlflow` | ~16k | ~800 |
+| Rank | Framework | PyPI Package | Monthly Downloads | GitHub Stars | Source Lines | vs Quark |
+|------|-----------|-------------|-------------------|--------------|-------------|---------|
+| 1 | LangChain | `langchain` | ~223M | 128k | 83,037 | ~300x |
+| 2 | LangGraph | `langgraph` | ~39M | 26k | 19,773 | ~70x |
+| 3 | OpenAI Agents SDK | `openai-agents` | ~14M | 19k | 51,437 | ~180x |
+| 4 | Pydantic AI | `pydantic-ai` | ~13M | 15k | 55,760 | ~200x |
+| 5 | Prefect | `prefect` | ~10M | 22k | — | — |
+| 6 | LlamaIndex | `llama-index` | ~9.5M | 47k | 76,395 | ~270x |
+| 7 | Instructor | `instructor` | ~8.8M | 12k | — | — |
+| 8 | DSPy | `dspy` | ~6.2M | 33k | 26,290 | ~90x |
+| 9 | CrewAI | `crewai` | ~5.4M | 45k | 96,485 | ~340x |
+| 10 | Strands Agents | `strands-agents` | ~5.5M | 5.3k | 34,729 | ~120x |
+| 11 | Agno | `agno` | ~1.3M | 38k | 279,527 | ~1000x |
+| 12 | AutoGen | `autogen-agentchat` | ~883k | 55k | 11,085 | ~40x |
+| 13 | Haystack | `haystack-ai` | ~570k | 24k | 54,740 | ~190x |
+| 14 | smolagents | `smolagents` | ~440k | 26k | 13,082 | ~46x |
+| 15 | ControlFlow | `controlflow` | ~16k | ~800 | — | — |
+| — | **Quark** | `quark` (pending) | — | — | **284** | **1x** |
 
 ---
 
