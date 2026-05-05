@@ -6,6 +6,14 @@
 
 Minimal Python framework for composing agents, tools, and multi-agent workflows. Define agents with a system prompt and tools, then compose them using the `>>` operator. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).
 
+Despite being a single ~300-line file, you get:
+- OpenTelemetry tracing
+- 100+ model providers via litellm
+- Multi-agent workflows with `>>`
+- Parallel fan-out and tool execution
+- Streaming
+- Conversation memory
+
 ## Install
 
 ```bash
