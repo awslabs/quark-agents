@@ -1,5 +1,7 @@
 # Quark Agents
 
+![source lines](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/awslabs/quark-agents/main/.github/badges/lines.json)
+
 > **Experimental.** An ongoing exploration into the simplest possible agentic framework — use it to learn, hack, and break agentic things.
 
 Minimal Python framework for composing agents, tools, and multi-agent workflows. Define agents with a system prompt and tools, then compose them using the `>>` operator. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).

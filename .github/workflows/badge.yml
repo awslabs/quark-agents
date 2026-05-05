@@ -1,0 +1,34 @@
+name: Update Lines Badge
+
+on:
+  push:
+    branches: [main]
+    paths: [quark.py]
+
+permissions:
+  contents: write
+
+jobs:
+  badge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Count lines and write badge JSON
+        run: |
+          LINES=$(wc -l < quark.py)
+          mkdir -p .github/badges
+          cat > .github/badges/lines.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "source",
+            "message": "${LINES} lines",
+            "color": "blueviolet"
+          }
+          EOF
+      - name: Commit badge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/badges/lines.json
+          git diff --cached --quiet || git commit -m "Update source lines badge"
+          git push
