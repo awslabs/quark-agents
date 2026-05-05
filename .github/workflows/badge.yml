@@ -20,7 +20,7 @@ jobs:
           cat > .github/badges/lines.json << EOF
           {
             "schemaVersion": 1,
-            "label": "source",
+            "label": "framework size",
             "message": "${LINES} lines",
             "color": "blueviolet"
           }
