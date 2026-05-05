@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-pip install quark
+pip install quark-agents
 ```
 
 ## Your first agent

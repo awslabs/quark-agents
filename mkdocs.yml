@@ -1,8 +1,8 @@
-site_name: Quark
-site_description: A ~200-line Python agentic framework
-site_url: https://subshrey.gitlab.io/quark
-repo_url: https://gitlab.aws.dev/subshrey/quark
-repo_name: subshrey/quark
+site_name: Quark Agents
+site_description: Minimal Python framework for composing agents, tools, and multi-agent workflows
+site_url: https://awslabs.github.io/quark-agents
+repo_url: https://github.com/awslabs/quark-agents
+repo_name: awslabs/quark-agents
 
 theme:
   name: material

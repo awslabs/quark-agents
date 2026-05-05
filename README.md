@@ -6,22 +6,22 @@ A <300-line Python agentic framework. Define agents with a system prompt and too
 
 ```bash
 # From PyPI (once available)
-pip install quark
+pip install quark-agents
 
 # From source
-git clone https://gitlab.aws.dev/subshrey/quark
-cd quark
+git clone https://github.com/awslabs/quark-agents
+cd quark-agents
 pip install .
 
 # With OpenTelemetry support
-pip install "quark[otel]"
+pip install "quark-agents[otel]"
 ```
 
 ### Install with uv
 
 ```bash
-git clone https://gitlab.aws.dev/subshrey/quark
-cd quark
+git clone https://github.com/awslabs/quark-agents
+cd quark-agents
 uv venv
 source .venv/bin/activate
 

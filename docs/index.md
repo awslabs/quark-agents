@@ -21,15 +21,15 @@ See the [Framework Comparison](comparison.md) for a source-level analysis of 15 
 
 ```bash
 # From PyPI
-pip install quark
+pip install quark-agents
 
 # From source
-git clone https://gitlab.aws.dev/subshrey/quark
-cd quark
+git clone https://github.com/awslabs/quark-agents
+cd quark-agents
 pip install .
 
 # With OpenTelemetry support
-pip install "quark[otel]"
+pip install "quark-agents[otel]"
 ```
 
 ## At a glance

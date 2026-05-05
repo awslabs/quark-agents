@@ -14,7 +14,7 @@ That's it. The next time you run your agent, traces will be exported to the endp
 ## Install OTel dependencies
 
 ```bash
-pip install "quark[otel]"
+pip install "quark-agents[otel]"
 ```
 
 Or manually:

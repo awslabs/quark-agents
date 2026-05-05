@@ -38,7 +38,7 @@ Everything else is instrumentation, convenience, or safety rails around this cor
 | 13 | Haystack | `haystack-ai` | ~570k | 24k | 54,740 | ~190x |
 | 14 | smolagents | `smolagents` | ~440k | 26k | 13,082 | ~46x |
 | 15 | ControlFlow | `controlflow` | ~16k | ~800 | 8,818 | ~30x |
-| — | **Quark** | `quark` (pending) | — | — | **284** | **1x** |
+| — | **Quark** | `quark-agents` | — | — | **284** | **1x** |
 
 ---
 
