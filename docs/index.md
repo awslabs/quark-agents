@@ -1,4 +1,6 @@
-# Quark
+# Quark Agents
+
+> **Experimental.** An ongoing exploration into the simplest possible agentic framework — use it to learn, hack, and break agentic things.
 
 A <300-line Python agentic framework, named after the smallest known fundamental particles. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
 
