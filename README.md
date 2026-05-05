@@ -1,11 +1,12 @@
-# Quark
+# Quark Agents
 
-A <300-line Python agentic framework. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).
+> **Experimental.** This project is under active development and not yet production-ready. APIs may change between releases.
+
+Minimal Python framework for composing agents, tools, and multi-agent workflows. Define agents with a system prompt and tools, then compose them using the `>>` operator. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).
 
 ## Install
 
 ```bash
-# From PyPI (once available)
 pip install quark-agents
 
 # From source
