@@ -4,6 +4,15 @@
 
 A <300-line Python agentic framework, named after the smallest known fundamental particles. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
 
+Despite being a single ~300-line file, you get:
+
+- OpenTelemetry tracing
+- 100+ model providers via litellm
+- Multi-agent workflows with `>>`
+- Parallel fan-out and tool execution
+- Streaming
+- Conversation memory
+
 ```python
 from quark import Agent
 
