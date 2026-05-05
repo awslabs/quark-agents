@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 dependencies = [
-    "litellm>=1.0.0",
+    "litellm>=1.83.7",
 ]
 
 [project.optional-dependencies]
