@@ -1,6 +1,6 @@
 # Quark Agents
 
-![source lines](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/awslabs/quark-agents/main/.github/badges/lines.json)
+![source lines](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/awslabs/quark-agents/main/.github/badges/lines.json) [![docs](https://img.shields.io/badge/docs-awslabs.github.io-blue)](https://awslabs.github.io/quark-agents/)
 
 > **Experimental.** An ongoing exploration into the simplest possible agentic framework — use it to learn, hack, and break agentic things.
 
