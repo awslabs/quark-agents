@@ -486,6 +486,66 @@ def test_integration_chained_tool_calls():
 
 
 @pytest.mark.integration
+def test_integration_mcp_inject():
+    """MCPClient.inject() wires MCP tools into a Quark agent using MCP's own schemas."""
+    import asyncio, threading
+    from mcp import ClientSession, StdioServerParameters
+    from mcp.client.stdio import stdio_client
+
+    class MCPClient:
+        def __init__(self, command, args):
+            self._server = StdioServerParameters(command=command, args=args)
+            self._loop = asyncio.new_event_loop()
+            self._ready = threading.Event()
+            self._session = None
+            self._mcp_tools = []
+            threading.Thread(target=lambda: self._loop.run_until_complete(self._start()), daemon=True).start()
+            self._ready.wait(timeout=10)
+
+        async def _start(self):
+            async with stdio_client(self._server) as (read, write):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    self._session = session
+                    self._mcp_tools = (await session.list_tools()).tools
+                    self._ready.set()
+                    await asyncio.Event().wait()
+
+        def _call(self, name, **kwargs):
+            future = asyncio.run_coroutine_threadsafe(
+                self._session.call_tool(name, kwargs), self._loop
+            )
+            result = future.result(timeout=30)
+            return "\n".join(c.text for c in result.content if hasattr(c, "text"))
+
+        def inject(self, agent):
+            for t in self._mcp_tools:
+                name = t.name
+                def make_fn(n):
+                    def fn(**kwargs): return self._call(n, **kwargs)
+                    fn.__name__ = n
+                    return fn
+                agent.tools[name] = make_fn(name)
+                agent.schemas.append({
+                    "type": "function",
+                    "function": {"name": name, "description": t.description, "parameters": t.inputSchema}
+                })
+            return agent
+
+    mcp = MCPClient("uvx", ["mcp-server-fetch"])
+    assert len(mcp._mcp_tools) > 0, "MCP server should expose at least one tool"
+
+    agent = Agent(system="You are a helpful assistant.", model=MODEL)
+    mcp.inject(agent)
+
+    assert "fetch" in agent.tools
+    assert any(s["function"]["name"] == "fetch" for s in agent.schemas)
+
+    result = agent.run("Fetch https://example.com and tell me the title of the page.")
+    assert "example" in result.lower()
+
+
+@pytest.mark.integration
 def test_integration_weather_with_conversion():
     """Agent must call get_weather (returns °F) then convert to Celsius."""
 

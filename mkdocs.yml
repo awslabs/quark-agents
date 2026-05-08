@@ -44,5 +44,6 @@ nav:
   - Pipelines: pipelines.md
   - Providers: providers.md
   - Observability: observability.md
+  - Use with MCP: mcp.md
   - API Reference: reference.md
   - Framework Comparison: comparison.md
