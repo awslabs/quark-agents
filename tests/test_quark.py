@@ -378,6 +378,97 @@ class TestAgent:
         user_msgs = [m for m in a.history if isinstance(m, dict) and m.get("role") == "user"]
         assert len(user_msgs) == 2
 
+    # --- stateless run ---
+
+    @patch("quark.litellm.completion")
+    def test_stateless_run_returns_tuple(self, mock_completion):
+        mock_completion.return_value = _mock_response(content="hello")
+        a = Agent()
+        result = a.run("hi", history=[])
+        assert isinstance(result, tuple)
+        response, history = result
+        assert response == "hello"
+
+    @patch("quark.litellm.completion")
+    def test_stateless_run_does_not_mutate_agent_history(self, mock_completion):
+        mock_completion.return_value = _mock_response(content="hello")
+        a = Agent()
+        a.run("hi", history=[])
+        assert len(a.history) == 1  # only system prompt
+
+    @patch("quark.litellm.completion")
+    def test_stateless_run_history_contains_exchange(self, mock_completion):
+        mock_completion.return_value = _mock_response(content="hello")
+        a = Agent()
+        _, history = a.run("hi", history=[])
+        # history contains the user dict and the appended assistant message object
+        assert len(history) >= 2
+        assert history[0].get("role") == "user"
+
+    @patch("quark.litellm.completion")
+    def test_stateless_run_history_threads_across_turns(self, mock_completion):
+        mock_completion.return_value = _mock_response(content="ok")
+        a = Agent()
+        _, h1 = a.run("first", history=[])
+        _, h2 = a.run("second", history=h1)
+        user_msgs = [m for m in h2 if (m.get("role") if isinstance(m, dict) else getattr(m, "role", None)) == "user"]
+        assert len(user_msgs) == 2
+
+    # --- arun ---
+
+    @patch("quark.litellm.acompletion")
+    def test_arun_returns_content(self, mock_acompletion):
+        import asyncio
+        mock_acompletion.return_value = _mock_response(content="async hello")
+        a = Agent()
+        result = asyncio.run(a.arun("hi"))
+        assert result == "async hello"
+
+    @patch("quark.litellm.acompletion")
+    def test_arun_stateless_returns_tuple(self, mock_acompletion):
+        import asyncio
+        mock_acompletion.return_value = _mock_response(content="async hello")
+        a = Agent()
+        result = asyncio.run(a.arun("hi", history=[]))
+        assert isinstance(result, tuple)
+        assert result[0] == "async hello"
+
+    @patch("quark.litellm.acompletion")
+    def test_arun_does_not_mutate_agent_history_in_stateless_mode(self, mock_acompletion):
+        import asyncio
+        mock_acompletion.return_value = _mock_response(content="ok")
+        a = Agent()
+        asyncio.run(a.arun("hi", history=[]))
+        assert len(a.history) == 1  # only system prompt
+
+    @patch("quark.litellm.acompletion")
+    def test_arun_calls_tool_and_loops(self, mock_acompletion):
+        import asyncio
+        tool_call = _mock_tool_call("double", {"x": 21})
+        mock_acompletion.side_effect = [
+            _mock_response(tool_calls=[tool_call]),
+            _mock_response(content="the answer is 42"),
+        ]
+        async def double(x: int) -> int:
+            """Double a number."""
+            return x * 2
+        a = Agent(tools={"double": double})
+        result = asyncio.run(a.arun("double 21"))
+        assert result == "the answer is 42"
+        assert mock_acompletion.call_count == 2
+
+    @patch("quark.litellm.acompletion")
+    def test_arun_concurrent(self, mock_acompletion):
+        """Multiple arun calls on a single event loop complete independently."""
+        import asyncio
+        mock_acompletion.return_value = _mock_response(content="ok")
+        a = Agent()
+        async def run_many():
+            return await asyncio.gather(*[a.arun(f"q{i}", history=[]) for i in range(10)])
+        results = asyncio.run(run_many())
+        assert len(results) == 10
+        assert all(r[0] == "ok" for r in results)
+
 
 # ---------------------------------------------------------------------------
 # Integration tests (real Bedrock — run with: pytest -m integration)

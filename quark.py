@@ -1,9 +1,9 @@
-"""Quark — a <300-line Python agentic framework. Provider-agnostic via litellm."""
+"""Quark — a minimal Python agentic framework. Provider-agnostic via litellm."""
 
 import asyncio, json, inspect, os, typing
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-from typing import Callable, Generator
+from typing import Callable, Generator, AsyncGenerator
 import litellm
 
 try:
@@ -31,12 +31,10 @@ except ImportError:
 
 
 def _span(name):
-    """Start an OTel span."""
     return _tracer.start_as_current_span(name, kind=getattr(SpanKind, "INTERNAL", None))
 
 
 def _attr(span, key, val):
-    """Set a span attribute safely."""
     if span and val is not None:
         try: span.set_attribute(key, val)
         except Exception: pass
@@ -61,18 +59,41 @@ class Agent:
     def __rrshift__(self, other):
         return Workflow([_wrap(other), self])
 
-    def run(self, user: str) -> str:
-        """Send a message and run the agentic loop until a final answer or max_turns."""
-        self.history.append({"role": "user", "content": user})
+    def _setup(self, user: str, history: list | None):
+        stateless = history is not None
+        h = history + [{"role": "user", "content": user}] if stateless else self.history
+        if not stateless: self.history.append({"role": "user", "content": user})
+        return stateless, h
+
+    def _ret(self, content, h, stateless):
+        v = content or "max turns reached"
+        return (v, h) if stateless else v
+
+    def run(self, user: str, history: list | None = None) -> "str | tuple[str, list]":
+        """Blocking agentic loop. Pass history=[] for stateless mode → returns (response, history)."""
+        stateless, h = self._setup(user, history)
         with self._agent_span(user) as span:
             for _ in range(self.max_turns):
-                content, tool_calls = self._completion()
+                content, tool_calls = self._completion(h)
                 if not tool_calls:
                     _attr(span, "output.value", content)
-                    return content or ""
-                self._run_tools(tool_calls)
+                    return (content or "", h) if stateless else content or ""
+                self._run_tools(tool_calls, h)
             _attr(span, "output.value", content)
-            return content or "max turns reached"
+            return self._ret(content, h, stateless)
+
+    async def arun(self, user: str, history: list | None = None) -> "str | tuple[str, list]":
+        """Async agentic loop — run thousands concurrently on a single event loop."""
+        stateless, h = self._setup(user, history)
+        with self._agent_span(user) as span:
+            for _ in range(self.max_turns):
+                content, tool_calls = await self._acompletion(h)
+                if not tool_calls:
+                    _attr(span, "output.value", content)
+                    return (content or "", h) if stateless else content or ""
+                await self._arun_tools(tool_calls, h)
+            _attr(span, "output.value", content)
+            return self._ret(content, h, stateless)
 
     def stream(self, user: str) -> Generator:
         """Stream the response token by token, executing any tool calls mid-stream."""
@@ -83,85 +104,121 @@ class Agent:
                 if not tool_calls:
                     _attr(span, "output.value", content)
                     return
-                self._run_tools(tool_calls)
+                self._run_tools(tool_calls, self.history)
             fallback = content or "max turns reached"
             _attr(span, "output.value", fallback)
             yield fallback
 
+    async def astream(self, user: str) -> AsyncGenerator:
+        """Async streaming — yields tokens live, executes tool calls mid-stream."""
+        self.history.append({"role": "user", "content": user})
+        with self._agent_span(user) as span:
+            for _ in range(self.max_turns):
+                content, tool_calls = "", None
+                async for chunk in self._astream_completion():
+                    if isinstance(chunk, str):
+                        yield chunk
+                        content += chunk
+                    else:
+                        tool_calls = chunk  # sentinel: tool_calls dict
+                if not tool_calls:
+                    _attr(span, "output.value", content)
+                    return
+                await self._arun_tools(tool_calls, self.history)
+            _attr(span, "output.value", content)
+            yield content or "max turns reached"
+
     @contextmanager
     def _agent_span(self, user):
-        """Open an OTel span for an agent invocation."""
         with _span(f"invoke_agent {self.name}") as s:
             _attr(s, "gen_ai.operation.name", "invoke_agent")
             _attr(s, "gen_ai.agent.name", self.name)
             _attr(s, "input.value", user)
             yield s
 
-    def _completion(self):
-        """Single non-streaming LLM call. Returns (content, list[dict] tool_calls)."""
+    def _finalize_completion(self, response, h, cs):
+        msg = response.choices[0].message
+        usage = getattr(response, "usage", None)
+        _attr(cs, "gen_ai.usage.input_tokens", getattr(usage, "prompt_tokens", None))
+        _attr(cs, "gen_ai.usage.output_tokens", getattr(usage, "completion_tokens", None))
+        h.append(msg)
+        tcs = [{"id": tc.id, "type": "function",
+                "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
+               for tc in (msg.tool_calls or [])]
+        return msg.content, tcs or None
+
+    def _completion(self, h: list):
         with _span(f"chat {self.model}") as cs:
             _attr(cs, "gen_ai.request.model", self.model)
-            response = litellm.completion(model=self.model, messages=self.history,
-                                          tools=self.schemas or None, num_retries=3)
-            msg = response.choices[0].message
-            usage = getattr(response, "usage", None)
-            _attr(cs, "gen_ai.usage.input_tokens", getattr(usage, "prompt_tokens", None))
-            _attr(cs, "gen_ai.usage.output_tokens", getattr(usage, "completion_tokens", None))
-        self.history.append(msg)
-        tool_calls = [{"id": tc.id, "type": "function",
-                       "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
-                      for tc in (msg.tool_calls or [])]
-        return msg.content, tool_calls or None
+            r = litellm.completion(model=self.model, messages=h, tools=self.schemas or None, num_retries=3)
+            return self._finalize_completion(r, h, cs)
+
+    async def _acompletion(self, h: list):
+        with _span(f"chat {self.model}") as cs:
+            _attr(cs, "gen_ai.request.model", self.model)
+            r = await litellm.acompletion(model=self.model, messages=h, tools=self.schemas or None, num_retries=3)
+            return self._finalize_completion(r, h, cs)
+
+    def _acc_tool(self, tool_acc, tc):
+        i = tc.index
+        if i not in tool_acc: tool_acc[i] = {"id": "", "name": "", "arguments": ""}
+        if tc.id: tool_acc[i]["id"] += tc.id
+        if tc.function:
+            if tc.function.name: tool_acc[i]["name"] += tc.function.name
+            if tc.function.arguments: tool_acc[i]["arguments"] += tc.function.arguments
+
+    def _finalize_stream(self, content, tool_acc):
+        if not tool_acc:
+            self.history.append({"role": "assistant", "content": content})
+            return None
+        tcs = [{"id": v["id"], "type": "function", "function": {"name": v["name"], "arguments": v["arguments"]}}
+               for _, v in sorted(tool_acc.items())]
+        self.history.append({"role": "assistant", "content": content or None, "tool_calls": tcs})
+        return tcs
 
     def _stream_completion(self):
-        """Single streaming LLM call. Yields chunks live, returns (content, tool_calls)."""
         response = litellm.completion(model=self.model, messages=self.history,
                                       tools=self.schemas or None, stream=True, num_retries=3)
         content, tool_acc = "", {}
         for chunk in response:
             delta = chunk.choices[0].delta
-            if delta.content:
-                content += delta.content
-                yield delta.content
-            for tc in delta.tool_calls or []:
-                i = tc.index
-                if i not in tool_acc:
-                    tool_acc[i] = {"id": "", "name": "", "arguments": ""}
-                if tc.id: tool_acc[i]["id"] += tc.id
-                if tc.function:
-                    if tc.function.name: tool_acc[i]["name"] += tc.function.name
-                    if tc.function.arguments: tool_acc[i]["arguments"] += tc.function.arguments
+            if delta.content: content += delta.content; yield delta.content
+            for tc in delta.tool_calls or []: self._acc_tool(tool_acc, tc)
+        return content, self._finalize_stream(content, tool_acc)
 
-        if not tool_acc:
-            self.history.append({"role": "assistant", "content": content})
-            return content, None
+    async def _astream_completion(self):
+        response = await litellm.acompletion(model=self.model, messages=self.history,
+                                             tools=self.schemas or None, stream=True, num_retries=3)
+        content, tool_acc = "", {}
+        async for chunk in response:
+            delta = chunk.choices[0].delta
+            if delta.content: content += delta.content; yield delta.content
+            for tc in getattr(delta, "tool_calls", None) or []: self._acc_tool(tool_acc, tc)
+        yield self._finalize_stream(content, tool_acc)
 
-        tool_calls = [{"id": v["id"], "type": "function",
-                       "function": {"name": v["name"], "arguments": v["arguments"]}}
-                      for _, v in sorted(tool_acc.items())]
-        self.history.append({"role": "assistant", "content": content or None,
-                              "tool_calls": tool_calls})
-        return content, tool_calls
+    async def _exec_tool(self, tc) -> dict:
+        name, cid, args = tc["function"]["name"], tc["id"], tc["function"]["arguments"]
+        with _span(f"execute_tool {name}") as ts:
+            _attr(ts, "gen_ai.tool.name", name)
+            _attr(ts, "gen_ai.tool.call.id", cid)
+            _attr(ts, "gen_ai.tool.call.arguments", args)
+            try:
+                result = self.tools[name](**json.loads(args))
+                if inspect.isawaitable(result): result = await result
+            except Exception as e:
+                _attr(ts, "error.type", type(e).__name__)
+                result = f"Error: {e}"
+            _attr(ts, "gen_ai.tool.call.result", str(result))
+            return {"role": "tool", "tool_call_id": cid, "content": str(result)}
 
-    def _run_tools(self, tool_calls):
-        """Run tool calls in parallel and append results to history."""
-        def _call(tc):
-            name, cid, args = tc["function"]["name"], tc["id"], tc["function"]["arguments"]
-            with _span(f"execute_tool {name}") as ts:
-                _attr(ts, "gen_ai.tool.name", name)
-                _attr(ts, "gen_ai.tool.call.id", cid)
-                _attr(ts, "gen_ai.tool.call.arguments", args)
-                try:
-                    result = self.tools[name](**json.loads(args))
-                except Exception as e:
-                    _attr(ts, "error.type", type(e).__name__)
-                    result = f"Error: {e}"
-                _attr(ts, "gen_ai.tool.call.result", str(result))
-                return {"role": "tool", "tool_call_id": cid, "content": str(result)}
-
+    def _run_tools(self, tool_calls, h: list):
         with ThreadPoolExecutor() as ex:
-            for m in ex.map(_call, tool_calls):
-                self.history.append(m)
+            for m in ex.map(lambda tc: asyncio.run(self._exec_tool(tc)), tool_calls):
+                h.append(m)
+
+    async def _arun_tools(self, tool_calls, h: list):
+        for m in await asyncio.gather(*[self._exec_tool(tc) for tc in tool_calls]):
+            h.append(m)
 
     def reset(self):
         """Clear conversation history, keeping the system prompt."""
