@@ -152,6 +152,38 @@ agent = Agent(model="gemini/gemini-2.0-flash")
 agent = Agent(model="ollama/llama3")
 ```
 
+### Async and stateless mode
+
+```python
+import asyncio
+
+# Stateless — pass history in, get it back, deploy anywhere (Lambda, Ray, etc.)
+response, history = await agent.arun("What is 2+2?", history=[])
+
+# Run thousands concurrently
+results = await asyncio.gather(*[agent.arun(prompt, history=[]) for prompt in prompts])
+```
+
+### Reactor — quota management at scale
+
+`asyncio.gather` fires all LLM calls simultaneously and hits rate limits. Reactor gates calls through a semaphore so your quota becomes a throughput floor, not a ceiling.
+
+```python
+from quark import Agent
+from quark_reactor import Reactor
+
+analyst = Agent(system="Give a one-sentence buy/hold/sell.", model="bedrock/...")
+tasks   = [(analyst, f"Analyze {ticker}") for ticker in stocks]
+
+reactor = Reactor(llm_concurrency=35)
+results = await reactor.run(tasks)
+```
+
+At 150 stocks with `llm_concurrency=35` against AWS Bedrock: **150/150 completed, zero failures, 22s**.
+Plain `asyncio.gather` on the same workload: 75/150 completed, 75 throttled.
+
+See [benchmarks/](benchmarks/) for the full multi-framework comparison.
+
 ### Observability (OpenTelemetry)
 
 Set environment variables — tracing is enabled automatically.

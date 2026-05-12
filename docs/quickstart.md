@@ -90,3 +90,79 @@ agent = Agent(model="ollama/llama3")
 ```
 
 See [Providers](providers.md) for the full list and setup instructions.
+
+## Use MCP tools
+
+Quark works with any [MCP](https://modelcontextprotocol.io) server. The pattern: run the MCP session in a background thread, then inject its tools directly into an agent.
+
+```bash
+pip install mcp
+```
+
+```python
+import asyncio, threading
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+from quark import Agent
+
+class MCPClient:
+    """Runs an MCP server in a background thread and exposes its tools to Quark."""
+
+    def __init__(self, command: str, args: list[str]):
+        self._server = StdioServerParameters(command=command, args=args)
+        self._loop = asyncio.new_event_loop()
+        self._ready = threading.Event()
+        self._session = None
+        self._mcp_tools = []
+        threading.Thread(target=lambda: self._loop.run_until_complete(self._start()), daemon=True).start()
+        self._ready.wait(timeout=10)
+
+    async def _start(self):
+        async with stdio_client(self._server) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                self._session = session
+                self._mcp_tools = (await session.list_tools()).tools
+                self._ready.set()
+                await asyncio.Event().wait()
+
+    def _call(self, name: str, **kwargs) -> str:
+        future = asyncio.run_coroutine_threadsafe(
+            self._session.call_tool(name, kwargs), self._loop
+        )
+        result = future.result(timeout=30)
+        return "\n".join(c.text for c in result.content if hasattr(c, "text"))
+
+    def inject(self, agent: Agent) -> Agent:
+        """Inject MCP tools into a Quark agent using the MCP server's own schemas."""
+        for t in self._mcp_tools:
+            name = t.name
+            def make_fn(n):
+                def fn(**kwargs): return self._call(n, **kwargs)
+                fn.__name__ = n
+                return fn
+            agent.tools[name] = make_fn(name)
+            agent.schemas.append({
+                "type": "function",
+                "function": {
+                    "name": name,
+                    "description": t.description,
+                    "parameters": t.inputSchema,
+                }
+            })
+        return agent
+```
+
+Then use it with any agent:
+
+```python
+# start the MCP server (here: mcp-server-fetch via uvx)
+mcp = MCPClient("uvx", ["mcp-server-fetch"])
+
+agent = Agent(system="You are a helpful assistant.", model="gpt-5.4")
+mcp.inject(agent)
+
+print(agent.run("Fetch https://example.com and tell me the title."))
+```
+
+`inject()` can be called on multiple agents and mixed with regular Quark tools — they all coexist in the same agent.

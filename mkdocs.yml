@@ -45,5 +45,6 @@ nav:
   - Providers: providers.md
   - Observability: observability.md
   - Use with MCP: mcp.md
+  - Reactor (Scale): reactor.md
   - API Reference: reference.md
   - Framework Comparison: comparison.md

@@ -2,16 +2,18 @@
 
 > **Experimental.** An ongoing exploration into the simplest possible agentic framework — use it to learn, hack, and break agentic things.
 
-A <300-line Python agentic framework, named after the smallest known fundamental particles. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator — just like Airflow, but for LLMs.
+A ~350-line Python agentic framework, named after the smallest known fundamental particles. Define agents with a system prompt and tools, then compose them into pipelines using the `>>` operator.
 
-Despite being a single ~300-line file, you get:
+Despite being a single file, you get:
 
-- OpenTelemetry tracing
 - 100+ model providers via litellm
 - Multi-agent workflows with `>>`
 - Parallel fan-out and tool execution
-- Streaming
-- Conversation memory
+- Async-first (`arun`, `astream`) — thousands of concurrent agents on one event loop
+- Stateless mode — pass history in, get it back, deploy anywhere
+- **Reactor** — built-in quota management for running agents at scale
+- OpenTelemetry tracing
+- Streaming and conversation memory
 
 ```python
 from quark import Agent
@@ -24,7 +26,9 @@ print(agent.run("What is the capital of France?"))
 
 Every major agentic framework — LangChain, CrewAI, AutoGen, LlamaIndex — solves the same core problem: call an LLM, execute tools if requested, loop until done. When you strip them down to their source code, the core loop is identical. The rest is abstraction on top of abstraction.
 
-Quark is the irreducible core parts of what makes an agent useful. A single file you can read, understand, and own in an afternoon. It is not a toy — it supports streaming, parallel tool execution, multi-agent pipelines, and production-grade OpenTelemetry tracing. But it never does more than you asked for.
+Quark is the irreducible core of what makes an agent useful. A single file you can read, understand, and own in an afternoon. It is not a toy — it supports streaming, parallel tool execution, multi-agent pipelines, async concurrency, and production-grade OpenTelemetry tracing. But it never does more than you asked for.
+
+The thing most frameworks don't ship: **quota management**. When you fire hundreds of LLM calls simultaneously, your API rate limit becomes the bottleneck. Quark ships [Reactor](reactor.md) — a semaphore-gated scheduler that keeps your throughput at your quota ceiling instead of crashing into it.
 
 See the [Framework Comparison](comparison.md) for a source-level analysis of 15 frameworks and why Quark makes the choices it does.
 
