@@ -27,12 +27,26 @@ LLM-backed agent with tool use, conversation memory, and `>>` chaining support.
 
 ### Methods
 
-#### `run(user: str) -> str`
+#### `run(user: str, history: list | None = None) -> str | tuple[str, list]`
 
-Send a message and run the agentic loop until a final answer or `max_turns` is reached. Blocking.
+Blocking agentic loop. Returns `str` by default. Pass `history=[]` for stateless mode — returns `(response, history)`.
 
 ```python
 result = agent.run("What is 42 * 17?")
+
+# stateless
+response, history = agent.run("What is 42 * 17?", history=[])
+```
+
+#### `arun(user: str, history: list | None = None) -> str | tuple[str, list]`
+
+Async agentic loop. Same signature as `run()`. Use with `await` or `asyncio.gather` for concurrent execution.
+
+```python
+result = await agent.arun("What is 42 * 17?")
+
+# fan-out
+results = await asyncio.gather(*[agent.arun(q, history=[]) for q in questions])
 ```
 
 #### `stream(user: str) -> Generator[str, None, None]`
@@ -41,6 +55,15 @@ Stream the response token by token. Executes tool calls mid-stream.
 
 ```python
 for chunk in agent.stream("Tell me a story."):
+    print(chunk, end="", flush=True)
+```
+
+#### `astream(user: str) -> AsyncGenerator[str, None]`
+
+Async streaming. Yields tokens live, executes tool calls mid-stream.
+
+```python
+async for chunk in agent.astream("Tell me a story."):
     print(chunk, end="", flush=True)
 ```
 

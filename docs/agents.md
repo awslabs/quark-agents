@@ -32,6 +32,41 @@ print(result)
 
 `run()` is blocking. It returns the final answer as a string.
 
+## Async
+
+Run thousands of agents concurrently on a single event loop — no threads, no overhead:
+
+```python
+import asyncio
+
+result = await agent.arun("Summarize the latest research on black holes.")
+
+# fan out across many questions at once
+results = await asyncio.gather(*[
+    agent.arun(q, history=[]) for q in questions
+])
+```
+
+`arun()` is the async equivalent of `run()`. Use it on Ray, Lambda, or any async framework.
+
+## Stateless mode
+
+By default agents keep conversation history on the object. Pass `history=[]` to opt into stateless mode — the agent returns `(response, history)` and carries no state itself:
+
+```python
+# first turn
+response, history = agent.run("My name is Alice.", history=[])
+
+# second turn — pass history back in
+response, history = agent.run("What is my name?", history=history)
+print(response)  # "Your name is Alice."
+
+# same works with arun
+response, history = await agent.arun("My name is Alice.", history=[])
+```
+
+Stateless mode makes agents trivially deployable on Lambda, Ray, or any stateless infra — store `history` in Redis or DynamoDB between turns, pass it back in on the next call.
+
 ## Streaming
 
 ```python
@@ -40,7 +75,14 @@ for chunk in agent.stream("Explain quantum entanglement."):
 print()
 ```
 
-`stream()` yields tokens as they arrive from the model.
+Async streaming:
+
+```python
+async for chunk in agent.astream("Explain quantum entanglement."):
+    print(chunk, end="", flush=True)
+```
+
+`stream()` / `astream()` yield tokens as they arrive from the model.
 
 ## Tools
 

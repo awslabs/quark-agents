@@ -6,11 +6,13 @@
 
 Minimal Python framework for composing agents, tools, and multi-agent workflows. Define agents with a system prompt and tools, then compose them using the `>>` operator. Provider-agnostic via [litellm](https://github.com/BerriAI/litellm).
 
-Despite being a single ~300-line file, you get:
+Despite being a single ~350-line file, you get:
 - OpenTelemetry tracing
 - 100+ model providers via litellm
 - Multi-agent workflows with `>>`
 - Parallel fan-out and tool execution
+- Async-first (`arun`, `astream`) — thousands of concurrent agents on one event loop
+- Stateless mode — pass history in, get it back, deploy anywhere
 - Streaming
 - Conversation memory
 
@@ -174,8 +176,10 @@ Every `Agent.run()`, `Workflow.run()`, and tool call emits OTel spans. Compatibl
 | `name` | `"agent"` | Name used in traces and pipeline display |
 
 **Methods:**
-- `agent.run(user: str) -> str` — blocking, returns final answer
-- `agent.stream(user: str) -> Generator` — yields tokens as they arrive
+- `agent.run(user, history=None)` — blocking; pass `history=[]` for stateless mode → returns `(response, history)`
+- `agent.arun(user, history=None)` — async; run thousands concurrently with `asyncio.gather`
+- `agent.stream(user)` — yields tokens as they arrive
+- `agent.astream(user)` — async streaming
 - `agent.reset()` — clears conversation history, keeps system prompt
 
 ### `Workflow`
