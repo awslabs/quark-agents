@@ -144,3 +144,26 @@ mcp.inject(agent)  # MCP tools added on top
 
 print(agent.run("Fetch https://example.com and count the words on the page."))
 ```
+
+---
+
+## Easier: use `quark_mcp`
+
+The `MCPClient` class above is available as a ready-made import via the `mcp` extra — no need to copy the boilerplate:
+
+```bash
+pip install "quark-agents[mcp]"
+```
+
+```python
+from quark import Agent
+from quark_mcp import MCPClient
+
+mcp = MCPClient("uvx", ["mcp-server-fetch"])
+agent = Agent(system="You are a helpful assistant.", model="gpt-5.4")
+mcp.inject(agent)
+
+print(agent.run("Fetch https://example.com and tell me the title."))
+```
+
+`quark_mcp` is a thin wrapper — the implementation is exactly what's shown above. If you need to customize the session lifecycle or timeout, copy the class and adapt it directly.
