@@ -1,0 +1,2153 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Minimal Python framework for composing agents, tools, and multi-agent workflows">
+      
+      
+      
+        <link rel="canonical" href="https://awslabs.github.io/quark-agents/comparison/">
+      
+      
+        <link rel="prev" href="../reference/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/atom.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Framework Comparison - Quark Agents</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#framework-comparison" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Quark Agents" class="md-header__button md-logo" aria-label="Quark Agents" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M224 398.8c-11.8 5.1-23.4 9.7-34.9 13.5 16.7 33.8 31 35.7 34.9 35.7s18.1-1.9 34.9-35.7c-11.4-3.9-23.1-8.4-34.9-13.5M414 256c33 45.2 44.3 90.9 23.6 128-20.2 36.3-62.5 49.3-115.2 43.2-22 52.1-55.7 84.8-98.4 84.8s-76.4-32.7-98.4-84.8c-52.7 6.1-95-6.9-115.2-43.2C-10.3 346.9 1 301.2 34 256c-33-45.2-44.3-90.9-23.6-128 20.2-36.3 62.5-49.3 115.2-43.2C147.6 32.7 181.2 0 224 0s76.4 32.7 98.4 84.8c52.7-6.1 95 6.8 115.2 43.2 20.7 37.1 9.4 82.8-23.6 128m-65.8 67.4c-1.7 14.2-3.9 28-6.7 41.2 31.8 1.4 38.6-8.7 40.2-11.7 2.3-4.2 7-17.9-11.9-48.1q-10.2 9.45-21.6 18.6m-6.7-175.9c2.8 13.1 5 26.9 6.7 41.2q11.4 9.15 21.6 18.6c18.9-30.2 14.2-44 11.9-48.1-1.6-2.9-8.4-13-40.2-11.7m-82.6-47.8C242.1 65.9 227.9 64 224 64s-18.1 1.9-34.9 35.7c11.4 3.9 23.1 8.4 34.9 13.5 11.8-5.1 23.4-9.7 34.9-13.5m-159 88.9c1.7-14.3 3.9-28 6.7-41.2-31.8-1.4-38.6 8.7-40.2 11.7-2.3 4.2-7 17.9 11.9 48.1q10.2-9.45 21.6-18.6M78.2 304.8c-18.9 30.2-14.2 44-11.9 48.1 1.6 2.9 8.4 13 40.2 11.7-2.8-13.1-5-26.9-6.7-41.2q-11.4-9.15-21.6-18.6M304 256a80 80 0 1 0-160 0 80 80 0 1 0 160 0m-80-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Quark Agents
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Framework Comparison
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/awslabs/quark-agents" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    awslabs/quark-agents
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../agents/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Agents
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../pipelines/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Pipelines
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../providers/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Providers
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../observability/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Observability
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../mcp/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Use with MCP
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reactor/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Reactor (Scale)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../ray/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Ray (Distributed)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Framework Comparison
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Quark Agents" class="md-nav__button md-logo" aria-label="Quark Agents" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M224 398.8c-11.8 5.1-23.4 9.7-34.9 13.5 16.7 33.8 31 35.7 34.9 35.7s18.1-1.9 34.9-35.7c-11.4-3.9-23.1-8.4-34.9-13.5M414 256c33 45.2 44.3 90.9 23.6 128-20.2 36.3-62.5 49.3-115.2 43.2-22 52.1-55.7 84.8-98.4 84.8s-76.4-32.7-98.4-84.8c-52.7 6.1-95-6.9-115.2-43.2C-10.3 346.9 1 301.2 34 256c-33-45.2-44.3-90.9-23.6-128 20.2-36.3 62.5-49.3 115.2-43.2C147.6 32.7 181.2 0 224 0s76.4 32.7 98.4 84.8c52.7-6.1 95 6.8 115.2 43.2 20.7 37.1 9.4 82.8-23.6 128m-65.8 67.4c-1.7 14.2-3.9 28-6.7 41.2 31.8 1.4 38.6-8.7 40.2-11.7 2.3-4.2 7-17.9-11.9-48.1q-10.2 9.45-21.6 18.6m-6.7-175.9c2.8 13.1 5 26.9 6.7 41.2q11.4 9.15 21.6 18.6c18.9-30.2 14.2-44 11.9-48.1-1.6-2.9-8.4-13-40.2-11.7m-82.6-47.8C242.1 65.9 227.9 64 224 64s-18.1 1.9-34.9 35.7c11.4 3.9 23.1 8.4 34.9 13.5 11.8-5.1 23.4-9.7 34.9-13.5m-159 88.9c1.7-14.3 3.9-28 6.7-41.2-31.8-1.4-38.6 8.7-40.2 11.7-2.3 4.2-7 17.9 11.9 48.1q10.2-9.45 21.6-18.6M78.2 304.8c-18.9 30.2-14.2 44-11.9 48.1 1.6 2.9 8.4 13 40.2 11.7-2.8-13.1-5-26.9-6.7-41.2q-11.4-9.15-21.6-18.6M304 256a80 80 0 1 0-160 0 80 80 0 1 0 160 0m-80-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64"/></svg>
+
+    </a>
+    Quark Agents
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/awslabs/quark-agents" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    awslabs/quark-agents
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use with MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reactor (Scale)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ray/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ray (Distributed)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Framework Comparison
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Framework Comparison
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-universal-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Universal Pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frameworks-ranked-by-monthly-pypi-downloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frameworks Ranked by Monthly PyPI Downloads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agentic-loop-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agentic Loop Structures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agentic Loop Structures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#langchain-agentexecutor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LangChain (AgentExecutor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#langgraph-pregel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LangGraph (Pregel)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openai-agents-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAI Agents SDK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydanticai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PydanticAI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crewai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CrewAI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smolagents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        smolagents
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dspy-react" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DSPy (ReAct)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autogen-assistantagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AutoGen (AssistantAgent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strands-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strands Agents
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agno-formerly-phidata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agno (formerly Phidata)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haystack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haystack
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-framework-synthesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Framework Synthesis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross-Framework Synthesis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-4-loop-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 4 loop primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-3-stop-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 3 stop signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-1-essential-state-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 1 essential state object
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-quark-omits-and-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Quark Omits (and why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-agent-throughput-150-stocks-local-asyncio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-agent throughput — 150 stocks, local asyncio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-agent-throughput-150-stocks-ec2-ray-cluster-4-m52xlarge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-agent throughput — 150 stocks, EC2 Ray cluster (4 × m5.2xlarge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fanout-pipeline-1000-tasks-5-llm-calls-each-ec2-ray-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fanout pipeline — 1000 tasks, 5 LLM calls each, EC2 Ray cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-universal-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Universal Pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frameworks-ranked-by-monthly-pypi-downloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frameworks Ranked by Monthly PyPI Downloads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agentic-loop-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agentic Loop Structures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agentic Loop Structures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#langchain-agentexecutor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LangChain (AgentExecutor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#langgraph-pregel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LangGraph (Pregel)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openai-agents-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAI Agents SDK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydanticai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PydanticAI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crewai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CrewAI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smolagents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        smolagents
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dspy-react" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DSPy (ReAct)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autogen-assistantagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AutoGen (AssistantAgent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strands-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strands Agents
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agno-formerly-phidata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agno (formerly Phidata)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haystack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haystack
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-framework-synthesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Framework Synthesis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross-Framework Synthesis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-4-loop-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 4 loop primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-3-stop-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 3 stop signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-1-essential-state-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 1 essential state object
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-quark-omits-and-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Quark Omits (and why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-agent-throughput-150-stocks-local-asyncio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-agent throughput — 150 stocks, local asyncio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-agent-throughput-150-stocks-ec2-ray-cluster-4-m52xlarge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-agent throughput — 150 stocks, EC2 Ray cluster (4 × m5.2xlarge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fanout-pipeline-1000-tasks-5-llm-calls-each-ec2-ray-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fanout pipeline — 1000 tasks, 5 LLM calls each, EC2 Ray cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="framework-comparison">Framework Comparison</h1>
+<p>Quark was built after a source-level study of every major agentic framework. This page documents that research — the loop structures, stop signals, and state management patterns across 15 frameworks — and explains why Quark makes the choices it does.</p>
+<h2 id="the-universal-pattern">The Universal Pattern</h2>
+<p>Every framework, regardless of abstraction level, reduces to the same irreducible loop:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>1. Build messages (system + user + history)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>2. Call LLM
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>3. If response has tool calls → execute tools → append results → go to 2
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>4. If response has no tool calls → return final answer
+</code></pre></div>
+<p>Everything else is instrumentation, convenience, or safety rails around this core. Quark exposes this core directly.</p>
+<hr />
+<h2 id="frameworks-ranked-by-monthly-pypi-downloads">Frameworks Ranked by Monthly PyPI Downloads</h2>
+<blockquote>
+<p>Data from pypistats.org, March 2026. Source lines measured from each framework's GitHub main branch (March 2026), excluding tests, docs, and examples.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Framework</th>
+<th>PyPI Package</th>
+<th>Monthly Downloads</th>
+<th>GitHub Stars</th>
+<th>Source Lines</th>
+<th>vs Quark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>LangChain</td>
+<td><code>langchain</code></td>
+<td>~223M</td>
+<td>128k</td>
+<td>83,037</td>
+<td>~300x</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LangGraph</td>
+<td><code>langgraph</code></td>
+<td>~39M</td>
+<td>26k</td>
+<td>19,773</td>
+<td>~70x</td>
+</tr>
+<tr>
+<td>3</td>
+<td>OpenAI Agents SDK</td>
+<td><code>openai-agents</code></td>
+<td>~14M</td>
+<td>19k</td>
+<td>51,437</td>
+<td>~180x</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Pydantic AI</td>
+<td><code>pydantic-ai</code></td>
+<td>~13M</td>
+<td>15k</td>
+<td>55,760</td>
+<td>~200x</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Prefect</td>
+<td><code>prefect</code></td>
+<td>~10M</td>
+<td>22k</td>
+<td>284,995</td>
+<td>~1000x</td>
+</tr>
+<tr>
+<td>6</td>
+<td>LlamaIndex</td>
+<td><code>llama-index</code></td>
+<td>~9.5M</td>
+<td>47k</td>
+<td>76,395</td>
+<td>~270x</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Instructor</td>
+<td><code>instructor</code></td>
+<td>~8.8M</td>
+<td>12k</td>
+<td>19,875</td>
+<td>~70x</td>
+</tr>
+<tr>
+<td>8</td>
+<td>DSPy</td>
+<td><code>dspy</code></td>
+<td>~6.2M</td>
+<td>33k</td>
+<td>26,290</td>
+<td>~90x</td>
+</tr>
+<tr>
+<td>9</td>
+<td>CrewAI</td>
+<td><code>crewai</code></td>
+<td>~5.4M</td>
+<td>45k</td>
+<td>96,485</td>
+<td>~340x</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Strands Agents</td>
+<td><code>strands-agents</code></td>
+<td>~5.5M</td>
+<td>5.3k</td>
+<td>34,729</td>
+<td>~120x</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Agno</td>
+<td><code>agno</code></td>
+<td>~1.3M</td>
+<td>38k</td>
+<td>279,527</td>
+<td>~1000x</td>
+</tr>
+<tr>
+<td>12</td>
+<td>AutoGen</td>
+<td><code>autogen-agentchat</code></td>
+<td>~883k</td>
+<td>55k</td>
+<td>11,085</td>
+<td>~40x</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Haystack</td>
+<td><code>haystack-ai</code></td>
+<td>~570k</td>
+<td>24k</td>
+<td>54,740</td>
+<td>~190x</td>
+</tr>
+<tr>
+<td>14</td>
+<td>smolagents</td>
+<td><code>smolagents</code></td>
+<td>~440k</td>
+<td>26k</td>
+<td>13,082</td>
+<td>~46x</td>
+</tr>
+<tr>
+<td>15</td>
+<td>ControlFlow</td>
+<td><code>controlflow</code></td>
+<td>~16k</td>
+<td>~800</td>
+<td>8,818</td>
+<td>~30x</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>Quark</strong></td>
+<td><code>quark-agents</code></td>
+<td>—</td>
+<td>—</td>
+<td><strong>284</strong></td>
+<td><strong>1x</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="agentic-loop-structures">Agentic Loop Structures</h2>
+<h3 id="langchain-agentexecutor">LangChain (AgentExecutor)</h3>
+<p><code>while self._should_continue(iterations, time_elapsed)</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B[agent.plan with intermediate_steps]
+    B --&gt;|AgentFinish| C[Return output]
+    B --&gt;|AgentAction| D[tool.run]
+    D --&gt; E[append to intermediate_steps]
+    E --&gt; F{max_iterations?}
+    F --&gt;|no| B
+    F --&gt;|yes| G[return_stopped_response]</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">intermediate_steps</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>  <span class="c1"># default: 15</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">output</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">plan</span><span class="p">(</span><span class="n">intermediate_steps</span><span class="p">,</span> <span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">AgentFinish</span><span class="p">):</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">return_values</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">observation</span> <span class="o">=</span> <span class="n">tools</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">tool</span><span class="p">]</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">tool_input</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">intermediate_steps</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">output</span><span class="p">,</span> <span class="n">observation</span><span class="p">))</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">return</span> <span class="n">agent</span><span class="o">.</span><span class="n">return_stopped_response</span><span class="p">(</span><span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="n">intermediate_steps</span><span class="p">)</span>
+</code></pre></div>
+<p>Stop: <code>AgentFinish</code> (parser detects <code>"Final Answer:"</code> token), <code>max_iterations</code>, <code>max_execution_time</code>.</p>
+<hr />
+<h3 id="langgraph-pregel">LangGraph (Pregel)</h3>
+<p><code>while loop.tick()</code> — Google Pregel superstep model</p>
+<pre class="mermaid"><code>flowchart TD
+    A[Input] --&gt; B[prepare_next_tasks]
+    B --&gt;|no tasks| C[Done]
+    B --&gt;|tasks ready| D[execute tasks concurrently]
+    D --&gt; E[apply_writes to channels]
+    E --&gt; F{recursion limit?}
+    F --&gt;|no| B
+    F --&gt;|yes| G[GraphInterrupt]</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">with</span> <span class="n">SyncPregelLoop</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="n">nodes</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span> <span class="k">as</span> <span class="n">loop</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">runner</span> <span class="o">=</span> <span class="n">PregelRunner</span><span class="p">(</span><span class="n">submit</span><span class="o">=</span><span class="n">loop</span><span class="o">.</span><span class="n">submit</span><span class="p">,</span> <span class="n">put_writes</span><span class="o">=</span><span class="n">loop</span><span class="o">.</span><span class="n">put_writes</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="k">while</span> <span class="n">loop</span><span class="o">.</span><span class="n">tick</span><span class="p">():</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">runner</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">loop</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>            <span class="k">pass</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="n">loop</span><span class="o">.</span><span class="n">after_tick</span><span class="p">()</span>
+</code></pre></div>
+<p>Not a traditional agentic loop — it's a graph execution engine. The "loop" is implicit in the graph topology.</p>
+<hr />
+<h3 id="openai-agents-sdk">OpenAI Agents SDK</h3>
+<p><code>while True:</code> with <code>current_turn</code> counter</p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B{max_turns?}
+    B --&gt;|yes| C[MaxTurnsExceeded]
+    B --&gt;|no| D[run_single_turn]
+    D --&gt;|FinalOutput| E[Return result]
+    D --&gt;|Handoff| F[switch current_agent]
+    F --&gt; B
+    D --&gt;|RunAgain| B
+    D --&gt;|Interruption| G[Suspend, await approval]</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">current_turn</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="k">if</span> <span class="n">current_turn</span> <span class="o">&gt;</span> <span class="n">max_turns</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        <span class="k">raise</span> <span class="n">MaxTurnsExceeded</span><span class="p">()</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">turn_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">run_single_turn</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">all_tools</span><span class="p">,</span> <span class="n">generated_items</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">turn_result</span><span class="o">.</span><span class="n">next_step</span><span class="p">,</span> <span class="n">NextStepFinalOutput</span><span class="p">):</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="k">return</span> <span class="n">RunResult</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">turn_result</span><span class="o">.</span><span class="n">next_step</span><span class="p">,</span> <span class="n">NextStepHandoff</span><span class="p">):</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="n">current_agent</span> <span class="o">=</span> <span class="n">turn_result</span><span class="o">.</span><span class="n">next_step</span><span class="o">.</span><span class="n">new_agent</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">turn_result</span><span class="o">.</span><span class="n">next_step</span><span class="p">,</span> <span class="n">NextStepRunAgain</span><span class="p">):</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="k">pass</span>  <span class="c1"># tool results fed back, continue</span>
+</code></pre></div>
+<p>Stop: <code>NextStepFinalOutput</code>, <code>max_turns</code> (default 10), guardrail tripwire, interruption.</p>
+<hr />
+<h3 id="pydanticai">PydanticAI</h3>
+<p>Graph node traversal — <code>while not isinstance(node, End)</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[UserPromptNode] --&gt; B[ModelRequestNode]
+    B --&gt; C[CallToolsNode]
+    C --&gt;|no tool calls| D[End: FinalResult]
+    C --&gt;|tool calls| E[execute tools in parallel]
+    E --&gt;|append results| B</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">current_node</span> <span class="o">=</span> <span class="n">input_node</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">while</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="n">End</span><span class="p">):</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">current_node</span> <span class="o">=</span> <span class="k">await</span> <span class="n">current_node</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">GraphRunContext</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">deps</span><span class="o">=</span><span class="n">deps</span><span class="p">))</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">return</span> <span class="n">current_node</span><span class="o">.</span><span class="n">output</span>
+</code></pre></div>
+<hr />
+<h3 id="crewai">CrewAI</h3>
+<p><code>while not isinstance(formatted_answer, AgentFinish)</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B{max_iter?}
+    B --&gt;|yes| C[force final LLM call]
+    B --&gt;|no| D[llm.call messages]
+    D --&gt; E[parser.parse raw]
+    E --&gt;|AgentFinish| F[Return output]
+    E --&gt;|AgentAction| G[tools_handler.run]
+    G --&gt; H[append Observation]
+    H --&gt; B</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">while</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">formatted_answer</span><span class="p">,</span> <span class="n">AgentFinish</span><span class="p">):</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="k">if</span> <span class="n">has_reached_max_iterations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        <span class="k">break</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">raw</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">formatted_answer</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">formatted_answer</span><span class="p">,</span> <span class="n">AgentAction</span><span class="p">):</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">tools_handler</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">formatted_answer</span><span class="o">.</span><span class="n">tool</span><span class="p">,</span> <span class="n">formatted_answer</span><span class="o">.</span><span class="n">tool_input</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Observation: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+<p>Stop: <code>"Final Answer:"</code> token, <code>max_iter</code> (default 20), <code>result_as_answer=True</code> tool.</p>
+<hr />
+<h3 id="smolagents">smolagents</h3>
+<p><code>while not returned_final_answer and step_number &lt;= max_steps</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B{step &lt;= max_steps?}
+    B --&gt;|no| C[_handle_max_steps_reached]
+    B --&gt;|yes| D[_step_stream: LLM + tool exec]
+    D --&gt;|is_final_answer| E[Return output]
+    D --&gt;|not final| F[append ActionStep to memory]
+    F --&gt; G[step_number += 1]
+    G --&gt; B</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">returned_final_answer</span> <span class="ow">and</span> <span class="n">step_number</span> <span class="o">&lt;=</span> <span class="n">max_steps</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">action_step</span> <span class="o">=</span> <span class="n">ActionStep</span><span class="p">(</span><span class="n">step_number</span><span class="o">=</span><span class="n">step_number</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step_stream</span><span class="p">(</span><span class="n">action_step</span><span class="p">):</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">ActionOutput</span><span class="p">)</span> <span class="ow">and</span> <span class="n">output</span><span class="o">.</span><span class="n">is_final_answer</span><span class="p">:</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>            <span class="n">returned_final_answer</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action_step</span><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">step_number</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+<p>Two agent types share the same outer loop: <code>CodeAgent</code> (LLM writes Python) and <code>ToolCallingAgent</code> (JSON tool calls).</p>
+<hr />
+<h3 id="dspy-react">DSPy (ReAct)</h3>
+<p><code>for idx in range(max_iters)</code> — bounded for loop, not while</p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B[self.react with trajectory]
+    B --&gt;|finish tool| C[self.extract final answer]
+    B --&gt;|ValueError| C
+    B --&gt;|other tool| D[execute tool]
+    D --&gt; E[append to trajectory]
+    E --&gt; F{max_iters?}
+    F --&gt;|no| B
+    F --&gt;|yes| C</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">trajectory</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iters</span><span class="p">):</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">react</span><span class="p">(</span><span class="n">trajectory</span><span class="o">=</span><span class="n">trajectory</span><span class="p">,</span> <span class="o">**</span><span class="n">input_args</span><span class="p">)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">trajectory</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;thought_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>     <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">next_thought</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">trajectory</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;tool_name_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">next_tool_name</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">trajectory</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">pred</span><span class="o">.</span><span class="n">next_tool_name</span><span class="p">](</span><span class="o">**</span><span class="n">pred</span><span class="o">.</span><span class="n">next_tool_args</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="k">if</span> <span class="n">pred</span><span class="o">.</span><span class="n">next_tool_name</span> <span class="o">==</span> <span class="s2">&quot;finish&quot;</span><span class="p">:</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        <span class="k">break</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">trajectory</span><span class="o">=</span><span class="n">trajectory</span><span class="p">,</span> <span class="o">**</span><span class="n">input_args</span><span class="p">)</span>
+</code></pre></div>
+<p>Unique: DSPy treats the loop as a <em>program to be compiled</em> — <code>self.react</code> prompts are auto-optimized.</p>
+<hr />
+<h3 id="autogen-assistantagent">AutoGen (AssistantAgent)</h3>
+<p><code>for loop_iteration in range(max_tool_iterations)</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[on_messages_stream] --&gt; B[call LLM]
+    B --&gt;|text response| C[yield Response]
+    B --&gt;|tool calls| D[asyncio.gather all tools]
+    D --&gt; E{handoff?}
+    E --&gt;|yes| F[yield HandoffMessage]
+    E --&gt;|no| G{max_tool_iterations?}
+    G --&gt;|yes| H[summarize or reflect]
+    G --&gt;|no| B</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">for</span> <span class="n">loop_iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_tool_iterations</span><span class="p">):</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">current_model_result</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        <span class="k">yield</span> <span class="n">Response</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>        <span class="k">return</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">tool_results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">execute_tool</span><span class="p">(</span><span class="n">tc</span><span class="p">)</span> <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">current_model_result</span><span class="o">.</span><span class="n">content</span><span class="p">])</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="k">await</span> <span class="n">model_context</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="n">FunctionExecutionResultMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">tool_results</span><span class="p">))</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">current_model_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_llm</span><span class="p">(</span><span class="n">model_context</span><span class="p">)</span>
+</code></pre></div>
+<p>Team level: actor-model. <code>RoundRobinGroupChatManager</code> dispatches to next agent in round-robin.</p>
+<hr />
+<h3 id="strands-agents">Strands Agents</h3>
+<p>Recursive async generator — no <code>while</code> loop</p>
+<pre class="mermaid"><code>flowchart TD
+    A[event_loop_cycle] --&gt; B[_handle_model_execution]
+    B --&gt;|end_turn| C[yield EventLoopStopEvent]
+    B --&gt;|tool_use| D[_handle_tool_execution]
+    D --&gt; E[yield tool events]
+    E --&gt; F[recurse_event_loop]
+    F --&gt; A</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">event_loop_cycle</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">invocation_state</span><span class="p">):</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">stop_reason</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_handle_model_execution</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="k">if</span> <span class="n">stop_reason</span> <span class="o">==</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">_handle_tool_execution</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            <span class="k">yield</span> <span class="n">event</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">recurse_event_loop</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">invocation_state</span><span class="p">):</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="k">yield</span> <span class="n">event</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>        <span class="k">return</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="k">yield</span> <span class="n">EventLoopStopEvent</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># end_turn → done</span>
+</code></pre></div>
+<p>The call stack IS the loop. First-class interrupt/resume — serialize mid-run state to S3/file, resume in a different process.</p>
+<hr />
+<h3 id="agno-formerly-phidata">Agno (formerly Phidata)</h3>
+<p><code>while True:</code> inside <code>models/base.py</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B[llm.call messages]
+    B --&gt; C{tool_calls?}
+    C --&gt;|no| D[Return final answer]
+    C --&gt;|yes| E[execute tools sequentially]
+    E --&gt; F{pause condition?}
+    F --&gt;|yes| G[Return paused]
+    F --&gt;|no| B</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">assistant_msg</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assistant_msg</span><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">assistant_msg</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="k">break</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="k">for</span> <span class="n">tool_call</span> <span class="ow">in</span> <span class="n">assistant_msg</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">functions</span><span class="p">[</span><span class="n">tool_call</span><span class="o">.</span><span class="n">name</span><span class="p">](</span><span class="o">**</span><span class="n">tool_call</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="k">if</span> <span class="n">any_pause_condition</span><span class="p">():</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="k">break</span>
+</code></pre></div>
+<hr />
+<h3 id="haystack">Haystack</h3>
+<p><code>while exe_context.counter &lt; self.max_agent_steps</code></p>
+<pre class="mermaid"><code>flowchart TD
+    A[Start] --&gt; B[chat_generator.run]
+    B --&gt;|no tool_call| C[Return text response]
+    B --&gt;|tool_call| D[_tool_invoker.run]
+    D --&gt; E{exit_condition met?}
+    E --&gt;|yes| F[Return]
+    E --&gt;|no| G{max_agent_steps?}
+    G --&gt;|yes| H[Log warning, return]
+    G --&gt;|no| B</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">while</span> <span class="n">exe_context</span><span class="o">.</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_agent_steps</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat_generator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">],</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">tool_call</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;replies&quot;</span><span class="p">]):</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="k">break</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">tool_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tool_invoker</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;replies&quot;</span><span class="p">],</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">)</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exit_conditions</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        <span class="k">break</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">exe_context</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+<p>The <code>Agent</code> is a <code>@component</code> but does NOT rely on pipeline cycling for its loop — the loop is entirely internal.</p>
+<hr />
+<h2 id="cross-framework-synthesis">Cross-Framework Synthesis</h2>
+<h3 id="the-4-loop-primitives">The 4 loop primitives</h3>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>Frameworks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>while True</code> / <code>while condition</code></td>
+<td>LangChain, OpenAI Agents, Agno, CrewAI, smolagents, Haystack</td>
+</tr>
+<tr>
+<td><code>for idx in range(max_iters)</code></td>
+<td>DSPy, AutoGen</td>
+</tr>
+<tr>
+<td>Graph node traversal</td>
+<td>LangGraph, PydanticAI, LlamaIndex</td>
+</tr>
+<tr>
+<td>Recursive async generator</td>
+<td>Strands Agents</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-3-stop-signals">The 3 stop signals</h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Frameworks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No tool calls in response</td>
+<td>OpenAI Agents, Agno, Haystack, AutoGen, PydanticAI</td>
+</tr>
+<tr>
+<td>Explicit finish token/tool</td>
+<td>LangChain (<code>"Final Answer:"</code>), CrewAI, DSPy (<code>"finish"</code> tool), smolagents</td>
+</tr>
+<tr>
+<td>Iteration cap only</td>
+<td>All (as hard fallback)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-1-essential-state-object">The 1 essential state object</h3>
+<p>Every framework carries the same thing under different names:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>messages: list of {role, content} dicts
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LangChain</td>
+<td><code>intermediate_steps</code></td>
+</tr>
+<tr>
+<td>OpenAI Agents</td>
+<td><code>generated_items</code></td>
+</tr>
+<tr>
+<td>PydanticAI</td>
+<td><code>GraphAgentState.message_history</code></td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td><code>self.messages</code></td>
+</tr>
+<tr>
+<td>smolagents</td>
+<td><code>self.memory.steps</code></td>
+</tr>
+<tr>
+<td>DSPy</td>
+<td><code>trajectory</code> dict</td>
+</tr>
+<tr>
+<td>AutoGen</td>
+<td><code>model_context</code></td>
+</tr>
+<tr>
+<td>Agno</td>
+<td><code>messages</code> list</td>
+</tr>
+<tr>
+<td>Quark</td>
+<td><code>self.history</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-quark-omits-and-why">What Quark Omits (and why)</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Frameworks that have it</th>
+<th>Why Quark omits it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Structured output validation</td>
+<td>PydanticAI, Instructor</td>
+<td>Out of scope — validate the output yourself</td>
+</tr>
+<tr>
+<td>Persistence across runs</td>
+<td>Agno, AutoGen, LangGraph</td>
+<td>Pass history in yourself; don't hide state</td>
+</tr>
+<tr>
+<td>Multi-agent handoffs</td>
+<td>OpenAI Agents, AutoGen, CrewAI</td>
+<td>Use <code>&gt;&gt;</code> to compose agents instead</td>
+</tr>
+<tr>
+<td>Graph topology</td>
+<td>LangGraph, PydanticAI</td>
+<td>Linear pipelines cover 90% of use cases</td>
+</tr>
+<tr>
+<td>Code execution</td>
+<td>smolagents, AutoGen</td>
+<td>A tool that runs code is just a tool</td>
+</tr>
+<tr>
+<td>Prompt optimization</td>
+<td>DSPy</td>
+<td>Orthogonal to the loop — use DSPy on top if needed</td>
+</tr>
+<tr>
+<td>Human-in-the-loop</td>
+<td>OpenAI Agents, Agno</td>
+<td>Not yet — planned</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="benchmark-results">Benchmark Results</h2>
+<p>All benchmarks run against Claude Haiku 4.5 via AWS Bedrock, <code>stream=False</code>, same system prompt across all frameworks. See <code>benchmarks/RESULTS.md</code> for full methodology and raw numbers.</p>
+<h3 id="single-agent-throughput-150-stocks-local-asyncio">Single-agent throughput — 150 stocks, local asyncio</h3>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Mode</th>
+<th>Wall time</th>
+<th>Success</th>
+<th>tasks/s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quark</td>
+<td>gather</td>
+<td>12.7s</td>
+<td>150/150</td>
+<td>11.8/s</td>
+</tr>
+<tr>
+<td>quark</td>
+<td><strong>reactor</strong></td>
+<td>22.6s</td>
+<td><strong>150/150</strong></td>
+<td>6.6/s</td>
+</tr>
+<tr>
+<td>langgraph</td>
+<td>gather</td>
+<td>7.8s</td>
+<td>76/150 ⚠</td>
+<td>—</td>
+</tr>
+<tr>
+<td>strands</td>
+<td>gather</td>
+<td>8.2s</td>
+<td>75/150 ⚠</td>
+<td>—</td>
+</tr>
+<tr>
+<td>crewai</td>
+<td>gather</td>
+<td>37.9s</td>
+<td>150/150</td>
+<td>4.0/s</td>
+</tr>
+</tbody>
+</table>
+<p>⚠ ~50% throttled by Bedrock rate limits. Reactor eliminates throttling.</p>
+<h3 id="single-agent-throughput-150-stocks-ec2-ray-cluster-4-m52xlarge">Single-agent throughput — 150 stocks, EC2 Ray cluster (4 × m5.2xlarge)</h3>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Mode</th>
+<th>Wall time</th>
+<th>Success</th>
+<th>tasks/s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quark</td>
+<td>ray_gather</td>
+<td>6.4s</td>
+<td>147/150</td>
+<td>23.0/s</td>
+</tr>
+<tr>
+<td>quark</td>
+<td><strong>ray_reactor</strong></td>
+<td>6.3s</td>
+<td><strong>147/150</strong></td>
+<td><strong>23.3/s</strong></td>
+</tr>
+<tr>
+<td>langgraph</td>
+<td>ray_gather</td>
+<td>9.7s</td>
+<td>147/150</td>
+<td>15.2/s</td>
+</tr>
+<tr>
+<td>strands</td>
+<td>ray_gather</td>
+<td>10.2s</td>
+<td>147/150</td>
+<td>14.4/s</td>
+</tr>
+<tr>
+<td>crewai</td>
+<td>ray_gather</td>
+<td>24.4s</td>
+<td>147/150</td>
+<td>6.1/s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fanout-pipeline-1000-tasks-5-llm-calls-each-ec2-ray-cluster">Fanout pipeline — 1000 tasks, 5 LLM calls each, EC2 Ray cluster</h3>
+<p>Pipeline: <code>fetch_topic → summarize → [critique + fact-check + style] → edit</code></p>
+<p>Quark runs the 3 fan-out agents concurrently via <code>asyncio.gather</code>. Others run sequentially.</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Wall time</th>
+<th>Success</th>
+<th>tasks/s</th>
+<th>LLM calls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>quark</strong></td>
+<td><strong>258.4s</strong></td>
+<td><strong>1000/1000</strong></td>
+<td><strong>3.87/s</strong></td>
+<td>5000</td>
+</tr>
+<tr>
+<td>strands</td>
+<td>282.5s</td>
+<td>1000/1000</td>
+<td>3.54/s</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>langgraph</td>
+<td>292.2s</td>
+<td>1000/1000</td>
+<td>3.42/s</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>crewai</td>
+<td>331.5s</td>
+<td>1000/1000</td>
+<td>3.02/s</td>
+<td>5000</td>
+</tr>
+</tbody>
+</table>
+<p>Quark is fastest at scale because the parallel fan-out saves ~2-4s per task vs sequential execution.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
