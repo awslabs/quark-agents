@@ -7,3 +7,15 @@ __pycache__/
 .pytest_cache/
 .venv/
 .env
+
+# Benchmark result data — lives in benchmarks/results/ subfolders, not root
+# These patterns prevent accidental commits of raw data to benchmarks/ root
+benchmarks/logs_*.json
+benchmarks/comparison_*.json
+benchmarks/comparison_*.png
+benchmarks/ray_*.json
+benchmarks/ray_*.png
+
+# Benchmark results are tracked under benchmarks/results/
+# Uncomment below to also ignore results/ (if you prefer not to commit data)
+# benchmarks/results/

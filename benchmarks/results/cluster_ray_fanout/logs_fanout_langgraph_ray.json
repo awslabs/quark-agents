@@ -1,0 +1,38 @@
+[
+  {
+    "framework": "langgraph",
+    "batch_size": 100,
+    "llm_calls_total": 500,
+    "n_success": 100,
+    "n_failed": 0,
+    "wall_time_s": 64.929,
+    "throughput": 1.5401
+  },
+  {
+    "framework": "langgraph",
+    "batch_size": 250,
+    "llm_calls_total": 1250,
+    "n_success": 250,
+    "n_failed": 0,
+    "wall_time_s": 75.215,
+    "throughput": 3.3238
+  },
+  {
+    "framework": "langgraph",
+    "batch_size": 500,
+    "llm_calls_total": 2500,
+    "n_success": 500,
+    "n_failed": 0,
+    "wall_time_s": 139.752,
+    "throughput": 3.5778
+  },
+  {
+    "framework": "langgraph",
+    "batch_size": 1000,
+    "llm_calls_total": 5000,
+    "n_success": 1000,
+    "n_failed": 0,
+    "wall_time_s": 271.776,
+    "throughput": 3.6795
+  }
+]

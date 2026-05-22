@@ -413,3 +413,46 @@ messages: list of {role, content} dicts
 | Code execution | smolagents, AutoGen | A tool that runs code is just a tool |
 | Prompt optimization | DSPy | Orthogonal to the loop — use DSPy on top if needed |
 | Human-in-the-loop | OpenAI Agents, Agno | Not yet — planned |
+
+---
+
+## Benchmark Results
+
+All benchmarks run against Claude Haiku 4.5 via AWS Bedrock, `stream=False`, same system prompt across all frameworks. See `benchmarks/RESULTS.md` for full methodology and raw numbers.
+
+### Single-agent throughput — 150 stocks, local asyncio
+
+| Framework | Mode | Wall time | Success | tasks/s |
+|---|---|---|---|---|
+| quark | gather | 12.7s | 150/150 | 11.8/s |
+| quark | **reactor** | 22.6s | **150/150** | 6.6/s |
+| langgraph | gather | 7.8s | 76/150 ⚠ | — |
+| strands | gather | 8.2s | 75/150 ⚠ | — |
+| crewai | gather | 37.9s | 150/150 | 4.0/s |
+
+⚠ ~50% throttled by Bedrock rate limits. Reactor eliminates throttling.
+
+### Single-agent throughput — 150 stocks, EC2 Ray cluster (4 × m5.2xlarge)
+
+| Framework | Mode | Wall time | Success | tasks/s |
+|---|---|---|---|---|
+| quark | ray_gather | 6.4s | 147/150 | 23.0/s |
+| quark | **ray_reactor** | 6.3s | **147/150** | **23.3/s** |
+| langgraph | ray_gather | 9.7s | 147/150 | 15.2/s |
+| strands | ray_gather | 10.2s | 147/150 | 14.4/s |
+| crewai | ray_gather | 24.4s | 147/150 | 6.1/s |
+
+### Fanout pipeline — 1000 tasks, 5 LLM calls each, EC2 Ray cluster
+
+Pipeline: `fetch_topic → summarize → [critique + fact-check + style] → edit`
+
+Quark runs the 3 fan-out agents concurrently via `asyncio.gather`. Others run sequentially.
+
+| Framework | Wall time | Success | tasks/s | LLM calls |
+|---|---|---|---|---|
+| **quark** | **258.4s** | **1000/1000** | **3.87/s** | 5000 |
+| strands | 282.5s | 1000/1000 | 3.54/s | 5000 |
+| langgraph | 292.2s | 1000/1000 | 3.42/s | 5000 |
+| crewai | 331.5s | 1000/1000 | 3.02/s | 5000 |
+
+Quark is fastest at scale because the parallel fan-out saves ~2-4s per task vs sequential execution.

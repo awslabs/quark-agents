@@ -1,0 +1,99 @@
+cluster_name: quark-ray-bench
+
+max_workers: 4
+
+provider:
+  type: aws
+  region: us-west-2
+  availability_zone: us-west-2a,us-west-2b,us-west-2c
+  use_internal_ips: false
+  cache_stopped_nodes: false   # always terminate, never stop
+
+auth:
+  ssh_user: ubuntu
+  ssh_private_key: ~/.ssh/ray-autoscaler_us-west-2.pem
+
+head_node_type: ray.head.default
+available_node_types:
+
+  # Head node: driver + coordinator only, NO task execution
+  ray.head.default:
+    resources: {}
+    node_config:
+      InstanceType: m5.2xlarge      # 8 vCPU, 32GB — same as workers, enough for driver + GCS + autoscaler
+      ImageId: ami-0640ac12c85f21746  # Ubuntu 22.04 LTS us-west-2
+      KeyName: ray-autoscaler_us-west-2
+      IamInstanceProfile:
+        Name: QuarkRayInstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 50
+            VolumeType: gp3
+      TagSpecifications:
+        - ResourceType: instance
+          Tags:
+            - Key: Name
+              Value: quark-ray-head
+            - Key: Project
+              Value: quark-benchmark
+
+  # Worker nodes: all Ray task execution happens here
+  ray.worker.default:
+    min_workers: 4
+    max_workers: 4
+    resources: {"worker": 15}
+    node_config:
+      InstanceType: m5.2xlarge   # 8 vCPU, 32GB — handles all tasks
+      ImageId: ami-0640ac12c85f21746
+      KeyName: ray-autoscaler_us-west-2
+      IamInstanceProfile:
+        Name: QuarkRayInstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+      TagSpecifications:
+        - ResourceType: instance
+          Tags:
+            - Key: Name
+              Value: quark-ray-worker
+            - Key: Project
+              Value: quark-benchmark
+
+# Sync project to all nodes (excludes .venv via .gitignore if present)
+file_mounts:
+  ~/quark-agents: .
+
+# Install all packages system-wide — Ray workers use system Python
+# Create .venv stub so autoscaler hash check passes
+setup_commands:
+  - sudo apt-get update -y -q
+  - sudo apt-get install -y -q python3-pip python3-venv
+  - pip3 install --quiet "litellm>=1.0.0" boto3 tenacity matplotlib
+  - python3 -m venv ~/quark-agents/.venv --without-pip 2>/dev/null || true
+  - ln -sf /usr/bin/python3 ~/quark-agents/.venv/bin/python
+  - ln -sf /usr/bin/python3 ~/quark-agents/.venv/bin/python3
+  - ulimit -n 65536
+
+# Head also needs ray[default] and boto3 for autoscaler
+head_setup_commands:
+  - pip3 install --quiet "ray[default]" boto3
+
+# Workers need ray[default]
+worker_setup_commands:
+  - pip3 install --quiet "ray[default]"
+
+# Head starts with --num-cpus=0 so NO tasks ever run here
+# RAY_memory_usage_threshold=0.99 gives more headroom before OOM kills
+head_start_ray_commands:
+  - ray stop
+  - ulimit -n 65536
+  - RAY_memory_usage_threshold=0.99 ray start --head --port=6379 --object-manager-port=8076 --num-cpus=0 --autoscaling-config=~/ray_bootstrap_config.yaml
+
+# Workers start normally with high memory threshold
+worker_start_ray_commands:
+  - ray stop
+  - ulimit -n 65536
+  - RAY_memory_usage_threshold=0.99 ray start --address=$RAY_HEAD_IP:6379 --object-manager-port=8076 --num-cpus=8

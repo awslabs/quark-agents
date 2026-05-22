@@ -40,7 +40,9 @@ dev = [
     "pytest-mock>=3.0",
     "mkdocs>=1.5",
     "mkdocs-material>=9.0",
+    "ray[default]>=2.0.0",
+    "tenacity>=8.0.0",
 ]
 
 [tool.setuptools]
-py-modules = ["quark", "quark_reactor", "quark_mcp"]
+py-modules = ["quark", "quark_reactor", "quark_mcp", "quark_ray"]

@@ -474,7 +474,7 @@ class TestAgent:
 # Integration tests (real Bedrock — run with: pytest -m integration)
 # ---------------------------------------------------------------------------
 
-MODEL = "bedrock/anthropic.claude-3-5-haiku-20241022-v1:0"
+MODEL = "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0"
 
 @pytest.mark.integration
 def test_integration_basic():
@@ -662,3 +662,147 @@ def test_integration_weather_with_conversion():
 
     result = agent.run("What is the temperature in Paris in Celsius?")
     assert "22" in result  # 72°F = 22.2°C
+
+
+# ---------------------------------------------------------------------------
+# Additional unit tests for coverage gaps
+# ---------------------------------------------------------------------------
+
+class TestAgentStream:
+    @patch("quark.litellm.completion")
+    def test_stream_yields_content_chunks(self, mock_completion):
+        """stream() yields tokens from the model response."""
+        response = MagicMock()
+        delta = MagicMock()
+        delta.content = "hello"
+        delta.tool_calls = []
+        chunk = MagicMock()
+        chunk.choices[0].delta = delta
+        mock_completion.return_value = iter([chunk, chunk])
+
+        a = Agent()
+        chunks = list(a.stream("say hello"))
+        assert "hello" in chunks
+
+    @patch("quark.litellm.completion")
+    def test_stream_appends_user_message_to_history(self, mock_completion):
+        """stream() adds the user message to history before streaming."""
+        response = MagicMock()
+        delta = MagicMock()
+        delta.content = "hi"
+        delta.tool_calls = []
+        chunk = MagicMock()
+        chunk.choices[0].delta = delta
+        mock_completion.return_value = iter([chunk])
+
+        a = Agent()
+        list(a.stream("hello"))
+        assert a.history[1]["role"] == "user"
+        assert a.history[1]["content"] == "hello"
+
+    @patch("quark.litellm.completion")
+    def test_stream_max_turns_yields_fallback(self, mock_completion):
+        """stream() yields 'max turns reached' if max_turns exhausted."""
+        tc = _mock_tool_call("noop", {})
+        # Each streaming response has a tool call, forcing the loop
+        def make_stream_response():
+            delta = MagicMock()
+            delta.content = None
+            tc_delta = MagicMock()
+            tc_delta.index = 0
+            tc_delta.id = "call_1"
+            tc_delta.function.name = "noop"
+            tc_delta.function.arguments = "{}"
+            delta.tool_calls = [tc_delta]
+            chunk = MagicMock()
+            chunk.choices[0].delta = delta
+            return iter([chunk])
+
+        mock_completion.side_effect = [make_stream_response() for _ in range(3)]
+        a = Agent(max_turns=3, tools={"noop": lambda: "ok"})
+        chunks = list(a.stream("go"))
+        assert "max turns reached" in "".join(chunks)
+
+
+class TestAgentMaxTurnsFallback:
+    @patch("quark.litellm.completion")
+    def test_run_returns_max_turns_message_when_exhausted(self, mock_completion):
+        """run() returns 'max turns reached' when max_turns is exhausted."""
+        tc = _mock_tool_call("noop", {})
+        mock_completion.return_value = _mock_response(tool_calls=[tc])
+        a = Agent(max_turns=2, tools={"noop": lambda: "ok"})
+        result = a.run("go")
+        assert result == "max turns reached"
+
+
+class TestSchemaEdgeCases:
+    def test_no_parameters(self):
+        """Function with no parameters produces empty properties."""
+        def fn() -> str:
+            """No args."""
+            pass
+        s = _schema("fn", fn)
+        assert s["function"]["parameters"]["properties"] == {}
+        assert s["function"]["parameters"]["required"] == []
+
+    def test_all_optional_parameters(self):
+        """Function where all params have defaults — required list is empty."""
+        def fn(a: str = "x", b: int = 0) -> None:
+            pass
+        params = _schema("fn", fn)["function"]["parameters"]
+        assert params["required"] == []
+
+    def test_mixed_required_and_optional(self):
+        """Mix of required and optional params."""
+        def fn(required: str, optional: int = 5) -> None:
+            pass
+        params = _schema("fn", fn)["function"]["parameters"]
+        assert "required" in params["required"]
+        assert "optional" not in params["required"]
+
+
+class TestWorkflowName:
+    def test_workflow_name_generated_from_steps(self):
+        """Workflow auto-generates a readable name from its steps."""
+        a = Agent(name="summarizer")
+        b = Agent(name="critic")
+        w = a >> b
+        assert "summarizer" in w.name
+        assert "critic" in w.name
+
+    def test_workflow_name_includes_parallel_steps(self):
+        """Parallel steps appear in brackets in the workflow name."""
+        a = Agent(name="a")
+        b = Agent(name="b")
+        c = Agent(name="c")
+        w = a >> [b, c]
+        assert "b" in w.name
+        assert "c" in w.name
+
+
+class TestAgentRunToolsParallel:
+    @patch("quark.litellm.completion")
+    def test_multiple_tool_calls_all_executed(self, mock_completion):
+        """When model returns multiple tool calls, all are executed."""
+        tc1 = _mock_tool_call("add", {"a": 1, "b": 2}, call_id="call_1")
+        tc2 = _mock_tool_call("multiply", {"a": 3, "b": 4}, call_id="call_2")
+        mock_completion.side_effect = [
+            _mock_response(tool_calls=[tc1, tc2]),
+            _mock_response(content="done"),
+        ]
+        results = []
+        def add(a: int, b: int) -> int:
+            """Add."""
+            results.append("add")
+            return a + b
+        def multiply(a: int, b: int) -> int:
+            """Multiply."""
+            results.append("multiply")
+            return a * b
+
+        a = Agent(tools={"add": add, "multiply": multiply})
+        a.run("compute")
+        assert "add" in results
+        assert "multiply" in results
+        tool_msgs = [m for m in a.history if isinstance(m, dict) and m.get("role") == "tool"]
+        assert len(tool_msgs) == 2

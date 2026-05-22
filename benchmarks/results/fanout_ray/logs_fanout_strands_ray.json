@@ -1,0 +1,38 @@
+[
+  {
+    "framework": "strands",
+    "batch_size": 100,
+    "llm_calls_total": 400,
+    "n_success": 100,
+    "n_failed": 0,
+    "wall_time_s": 38.028,
+    "throughput": 2.6297
+  },
+  {
+    "framework": "strands",
+    "batch_size": 250,
+    "llm_calls_total": 1000,
+    "n_success": 250,
+    "n_failed": 0,
+    "wall_time_s": 79.199,
+    "throughput": 3.1566
+  },
+  {
+    "framework": "strands",
+    "batch_size": 500,
+    "llm_calls_total": 2000,
+    "n_success": 500,
+    "n_failed": 0,
+    "wall_time_s": 148.795,
+    "throughput": 3.3603
+  },
+  {
+    "framework": "strands",
+    "batch_size": 1000,
+    "llm_calls_total": 4000,
+    "n_success": 1000,
+    "n_failed": 0,
+    "wall_time_s": 296.307,
+    "throughput": 3.3749
+  }
+]
