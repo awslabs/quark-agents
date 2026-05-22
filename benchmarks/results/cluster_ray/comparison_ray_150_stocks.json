@@ -1,0 +1,40 @@
+{
+  "n_stocks": 150,
+  "mode": "cluster",
+  "frameworks": [
+    "crewai",
+    "strands",
+    "quark",
+    "langgraph"
+  ],
+  "summary": {
+    "crewai": {
+      "ray_gather": {
+        "total": 28.042,
+        "success": 147
+      }
+    },
+    "strands": {
+      "ray_gather": {
+        "total": 8.797,
+        "success": 147
+      }
+    },
+    "quark": {
+      "ray_gather": {
+        "total": 8.521,
+        "success": 147
+      },
+      "ray_reactor": {
+        "total": 7.252,
+        "success": 147
+      }
+    },
+    "langgraph": {
+      "ray_gather": {
+        "total": 12.709,
+        "success": 147
+      }
+    }
+  }
+}

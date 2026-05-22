@@ -30,7 +30,9 @@ Quark is the irreducible core of what makes an agent useful. A single file you c
 
 The thing most frameworks don't ship: **quota management**. When you fire hundreds of LLM calls simultaneously, your API rate limit becomes the bottleneck. Quark ships [Reactor](reactor.md) — a semaphore-gated scheduler that keeps your throughput at your quota ceiling instead of crashing into it.
 
-See the [Framework Comparison](comparison.md) for a source-level analysis of 15 frameworks and why Quark makes the choices it does.
+Quark also ships **Ray integration** (`quark_ray`) for distributing pipelines across an EC2 cluster. The same `>>` pipeline runs locally or across 40 worker slots with one flag change. At 1000 tasks with a 5-LLM-call fanout pipeline, Quark on Ray outperforms LangGraph, Strands, and CrewAI — the parallel fan-out step runs 3 agents concurrently instead of sequentially.
+
+See the [Framework Comparison](comparison.md) for a source-level analysis of 15 frameworks and benchmark results across local, local Ray, and EC2 cluster execution modes.
 
 ## Install
 

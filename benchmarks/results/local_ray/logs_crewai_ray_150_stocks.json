@@ -1,0 +1,1213 @@
+{
+  "ray_gather": {
+    "n_stocks": 150,
+    "framework": "crewai",
+    "mode": "ray_gather",
+    "llm_concurrency": 0,
+    "total": 43.974,
+    "t0": 671510.24144175,
+    "success": 147,
+    "timings": {
+      "1": {
+        "ticker": "AAPL",
+        "task_start": 671515.819264917,
+        "llm_start": 671515.819265583,
+        "llm_end": 671518.770599208,
+        "task_end": 671518.770599208,
+        "status": "ok"
+      },
+      "2": {
+        "ticker": "MSFT",
+        "task_start": 671515.839708667,
+        "llm_start": 671515.839709333,
+        "llm_end": 671518.303048917,
+        "task_end": 671518.303048917,
+        "status": "ok"
+      },
+      "3": {
+        "ticker": "GOOGL",
+        "task_start": 671515.830064292,
+        "llm_start": 671515.83006525,
+        "llm_end": 671518.389626458,
+        "task_end": 671518.389626458,
+        "status": "ok"
+      },
+      "4": {
+        "ticker": "AMZN",
+        "task_start": 671515.8480645,
+        "llm_start": 671515.848065333,
+        "llm_end": 671518.678951292,
+        "task_end": 671518.678951292,
+        "status": "ok"
+      },
+      "5": {
+        "ticker": "NVDA",
+        "task_start": 671515.836335292,
+        "llm_start": 671515.836335875,
+        "llm_end": 671518.227079833,
+        "task_end": 671518.227079833,
+        "status": "ok"
+      },
+      "6": {
+        "ticker": "META",
+        "task_start": 671515.826161292,
+        "llm_start": 671515.826162125,
+        "llm_end": 671518.953043375,
+        "task_end": 671518.953043375,
+        "status": "ok"
+      },
+      "7": {
+        "ticker": "TSLA",
+        "task_start": 671515.861377458,
+        "llm_start": 671515.861378375,
+        "llm_end": 671518.640870792,
+        "task_end": 671518.640870792,
+        "status": "ok"
+      },
+      "8": {
+        "ticker": "NFLX",
+        "task_start": 671515.907784958,
+        "llm_start": 671515.907785875,
+        "llm_end": 671518.820928167,
+        "task_end": 671518.820928167,
+        "status": "ok"
+      },
+      "9": {
+        "ticker": "AMD",
+        "task_start": 671515.901582958,
+        "llm_start": 671515.901583833,
+        "llm_end": 671518.979934208,
+        "task_end": 671518.979934208,
+        "status": "ok"
+      },
+      "10": {
+        "ticker": "INTC",
+        "task_start": 671515.87733375,
+        "llm_start": 671515.877334542,
+        "llm_end": 671518.901971792,
+        "task_end": 671518.901971792,
+        "status": "ok"
+      },
+      "11": {
+        "ticker": "CRM",
+        "task_start": 671518.231604208,
+        "llm_start": 671518.231605083,
+        "llm_end": 671520.909501042,
+        "task_end": 671520.909501042,
+        "status": "ok"
+      },
+      "12": {
+        "ticker": "ORCL",
+        "task_start": 671518.307629625,
+        "llm_start": 671518.307630917,
+        "llm_end": 671521.15868625,
+        "task_end": 671521.15868625,
+        "status": "ok"
+      },
+      "13": {
+        "ticker": "IBM",
+        "task_start": 671518.394584042,
+        "llm_start": 671518.394584958,
+        "llm_end": 671521.061633792,
+        "task_end": 671521.061633792,
+        "status": "ok"
+      },
+      "14": {
+        "ticker": "QCOM",
+        "task_start": 671518.64514375,
+        "llm_start": 671518.645145,
+        "llm_end": 671521.766277792,
+        "task_end": 671521.766277792,
+        "status": "ok"
+      },
+      "15": {
+        "ticker": "TXN",
+        "task_start": 671518.684856292,
+        "llm_start": 671518.684857875,
+        "llm_end": 671521.318236083,
+        "task_end": 671521.318236083,
+        "status": "ok"
+      },
+      "16": {
+        "ticker": "PYPL",
+        "task_start": 671539.651245792,
+        "llm_start": 671539.651247583,
+        "llm_end": 671541.8160925,
+        "task_end": 671541.8160925,
+        "status": "ok"
+      },
+      "17": {
+        "ticker": "SHOP",
+        "task_start": 671518.828710417,
+        "llm_start": 671518.828711333,
+        "llm_end": 671520.966310833,
+        "task_end": 671520.966310833,
+        "status": "ok"
+      },
+      "18": {
+        "ticker": "UBER",
+        "task_start": 671518.909939333,
+        "llm_start": 671518.909940792,
+        "llm_end": 671521.339923208,
+        "task_end": 671521.339923208,
+        "status": "ok"
+      },
+      "19": {
+        "ticker": "LYFT",
+        "task_start": 671518.96772775,
+        "llm_start": 671518.967728458,
+        "llm_end": 671521.197144292,
+        "task_end": 671521.197144292,
+        "status": "ok"
+      },
+      "20": {
+        "ticker": "SNAP",
+        "task_start": 671518.989646,
+        "llm_start": 671518.989647917,
+        "llm_end": 671521.433092583,
+        "task_end": 671521.433092583,
+        "status": "ok"
+      },
+      "21": {
+        "ticker": "COIN",
+        "task_start": 671520.913584,
+        "llm_start": 671520.913584833,
+        "llm_end": 671523.43645125,
+        "task_end": 671523.43645125,
+        "status": "ok"
+      },
+      "22": {
+        "ticker": "RBLX",
+        "task_start": 671520.971456042,
+        "llm_start": 671520.971456875,
+        "llm_end": 671523.029005333,
+        "task_end": 671523.029005333,
+        "status": "ok"
+      },
+      "23": {
+        "ticker": "HOOD",
+        "task_start": 671521.065765083,
+        "llm_start": 671521.065766333,
+        "llm_end": 671523.312070958,
+        "task_end": 671523.312070958,
+        "status": "ok"
+      },
+      "24": {
+        "ticker": "PLTR",
+        "task_start": 671521.163281708,
+        "llm_start": 671521.163282667,
+        "llm_end": 671523.430116417,
+        "task_end": 671523.430116417,
+        "status": "ok"
+      },
+      "25": {
+        "ticker": "SOFI",
+        "task_start": 671521.205032667,
+        "llm_start": 671521.205033583,
+        "llm_end": 671523.488379583,
+        "task_end": 671523.488379583,
+        "status": "ok"
+      },
+      "26": {
+        "ticker": "RIVN",
+        "task_start": 671521.304561542,
+        "llm_start": 671521.30456225,
+        "llm_end": 671523.831755,
+        "task_end": 671523.831755,
+        "status": "ok"
+      },
+      "27": {
+        "ticker": "NIO",
+        "task_start": 671521.328633375,
+        "llm_start": 671521.328634625,
+        "llm_end": 671523.647742625,
+        "task_end": 671523.647742625,
+        "status": "ok"
+      },
+      "28": {
+        "ticker": "XPEV",
+        "task_start": 671521.350494583,
+        "llm_start": 671521.350495417,
+        "llm_end": 671523.420266833,
+        "task_end": 671523.420266833,
+        "status": "ok"
+      },
+      "29": {
+        "ticker": "LI",
+        "task_start": 671521.438626417,
+        "llm_start": 671521.43862725,
+        "llm_end": 671523.60966225,
+        "task_end": 671523.60966225,
+        "status": "ok"
+      },
+      "30": {
+        "ticker": "BABA",
+        "task_start": 671521.770215292,
+        "llm_start": 671521.770217083,
+        "llm_end": 671524.323322375,
+        "task_end": 671524.323322375,
+        "status": "ok"
+      },
+      "31": {
+        "ticker": "JD",
+        "task_start": 671523.033369125,
+        "llm_start": 671523.03337075,
+        "llm_end": 671525.539772583,
+        "task_end": 671525.539772583,
+        "status": "ok"
+      },
+      "32": {
+        "ticker": "PDD",
+        "task_start": 671523.315796792,
+        "llm_start": 671523.315797458,
+        "llm_end": 671525.485414042,
+        "task_end": 671525.485414042,
+        "status": "ok"
+      },
+      "33": {
+        "ticker": "BIDU",
+        "task_start": 671523.424951875,
+        "llm_start": 671523.424952667,
+        "llm_end": 671525.842603875,
+        "task_end": 671525.842603875,
+        "status": "ok"
+      },
+      "34": {
+        "ticker": "JPM",
+        "task_start": 671523.438261792,
+        "llm_start": 671523.438262458,
+        "llm_end": 671525.51013925,
+        "task_end": 671525.51013925,
+        "status": "ok"
+      },
+      "35": {
+        "ticker": "BAC",
+        "task_start": 671523.452885375,
+        "llm_start": 671523.45288625,
+        "llm_end": 671525.977357333,
+        "task_end": 671525.977357333,
+        "status": "ok"
+      },
+      "36": {
+        "ticker": "GS",
+        "task_start": 671523.496636625,
+        "llm_start": 671523.496638375,
+        "llm_end": 671525.571307625,
+        "task_end": 671525.571307625,
+        "status": "ok"
+      },
+      "37": {
+        "ticker": "MS",
+        "task_start": 671523.615084792,
+        "llm_start": 671523.615085583,
+        "llm_end": 671525.614294542,
+        "task_end": 671525.614294542,
+        "status": "ok"
+      },
+      "38": {
+        "ticker": "WFC",
+        "task_start": 671523.659167167,
+        "llm_start": 671523.659168667,
+        "llm_end": 671526.223362667,
+        "task_end": 671526.223362667,
+        "status": "ok"
+      },
+      "39": {
+        "ticker": "C",
+        "task_start": 671523.835642583,
+        "llm_start": 671523.835643375,
+        "llm_end": 671525.622204708,
+        "task_end": 671525.622204708,
+        "status": "ok"
+      },
+      "40": {
+        "ticker": "AXP",
+        "task_start": 671524.327216208,
+        "llm_start": 671524.327217042,
+        "llm_end": 671526.583806417,
+        "task_end": 671526.583806417,
+        "status": "ok"
+      },
+      "41": {
+        "ticker": "XOM",
+        "task_start": 671525.489593708,
+        "llm_start": 671525.489594542,
+        "llm_end": 671528.344671,
+        "task_end": 671528.344671,
+        "status": "ok"
+      },
+      "42": {
+        "ticker": "CVX",
+        "task_start": 671525.516530583,
+        "llm_start": 671525.516531833,
+        "llm_end": 671527.73874,
+        "task_end": 671527.73874,
+        "status": "ok"
+      },
+      "43": {
+        "ticker": "COP",
+        "task_start": 671525.544228958,
+        "llm_start": 671525.544229667,
+        "llm_end": 671527.82410025,
+        "task_end": 671527.82410025,
+        "status": "ok"
+      },
+      "44": {
+        "ticker": "BP",
+        "task_start": 671525.581825917,
+        "llm_start": 671525.581826833,
+        "llm_end": 671527.842377,
+        "task_end": 671527.842377,
+        "status": "ok"
+      },
+      "45": {
+        "ticker": "PFE",
+        "task_start": 671525.6206845,
+        "llm_start": 671525.62068525,
+        "llm_end": 671528.070465042,
+        "task_end": 671528.070465042,
+        "status": "ok"
+      },
+      "46": {
+        "ticker": "JNJ",
+        "task_start": 671525.629197208,
+        "llm_start": 671525.629197958,
+        "llm_end": 671527.877446625,
+        "task_end": 671527.877446625,
+        "status": "ok"
+      },
+      "47": {
+        "ticker": "MRNA",
+        "task_start": 671525.851844667,
+        "llm_start": 671525.851845458,
+        "llm_end": 671527.781975042,
+        "task_end": 671527.781975042,
+        "status": "ok"
+      },
+      "48": {
+        "ticker": "ABBV",
+        "task_start": 671525.981934625,
+        "llm_start": 671525.981935542,
+        "llm_end": 671528.420520333,
+        "task_end": 671528.420520333,
+        "status": "ok"
+      },
+      "49": {
+        "ticker": "LLY",
+        "task_start": 671526.22735375,
+        "llm_start": 671526.227355458,
+        "llm_end": 671528.545070792,
+        "task_end": 671528.545070792,
+        "status": "ok"
+      },
+      "50": {
+        "ticker": "BMY",
+        "task_start": 671526.587868833,
+        "llm_start": 671526.587869542,
+        "llm_end": 671528.874347208,
+        "task_end": 671528.874347208,
+        "status": "ok"
+      },
+      "51": {
+        "ticker": "WMT",
+        "task_start": 671527.744400083,
+        "llm_start": 671527.744400792,
+        "llm_end": 671530.48770375,
+        "task_end": 671530.48770375,
+        "status": "ok"
+      },
+      "52": {
+        "ticker": "COST",
+        "task_start": 671527.787872875,
+        "llm_start": 671527.787873625,
+        "llm_end": 671530.062666875,
+        "task_end": 671530.062666875,
+        "status": "ok"
+      },
+      "53": {
+        "ticker": "TGT",
+        "task_start": 671527.829314625,
+        "llm_start": 671527.829315583,
+        "llm_end": 671530.110394875,
+        "task_end": 671530.110394875,
+        "status": "ok"
+      },
+      "54": {
+        "ticker": "HD",
+        "task_start": 671549.662183958,
+        "llm_start": 671549.662184875,
+        "llm_end": 671551.912866042,
+        "task_end": 671551.912866042,
+        "status": "ok"
+      },
+      "55": {
+        "ticker": "LOW",
+        "task_start": 671527.887946458,
+        "llm_start": 671527.887948083,
+        "llm_end": 671530.17649325,
+        "task_end": 671530.17649325,
+        "status": "ok"
+      },
+      "56": {
+        "ticker": "DIS",
+        "task_start": 671528.07643225,
+        "llm_start": 671528.076433833,
+        "llm_end": 671530.4404375,
+        "task_end": 671530.4404375,
+        "status": "ok"
+      },
+      "57": {
+        "ticker": "CMCSA",
+        "task_start": 671528.349440458,
+        "llm_start": 671528.349441458,
+        "llm_end": 671530.897106833,
+        "task_end": 671530.897106833,
+        "status": "ok"
+      },
+      "58": {
+        "ticker": "T",
+        "task_start": 671528.425388125,
+        "llm_start": 671528.425389,
+        "llm_end": 671530.7360365,
+        "task_end": 671530.7360365,
+        "status": "ok"
+      },
+      "59": {
+        "ticker": "VZ",
+        "task_start": 671528.549689333,
+        "llm_start": 671528.549690375,
+        "llm_end": 671530.877343958,
+        "task_end": 671530.877343958,
+        "status": "ok"
+      },
+      "60": {
+        "ticker": "TMUS",
+        "task_start": 671528.878457708,
+        "llm_start": 671528.878459208,
+        "llm_end": 671531.354011583,
+        "task_end": 671531.354011583,
+        "status": "ok"
+      },
+      "61": {
+        "ticker": "SPCE",
+        "task_start": 671530.066866583,
+        "llm_start": 671530.066867292,
+        "llm_end": 671532.345707542,
+        "task_end": 671532.345707542,
+        "status": "ok"
+      },
+      "62": {
+        "ticker": "OPEN",
+        "task_start": 671540.070707542,
+        "llm_start": 671540.070708708,
+        "llm_end": 671542.623952167,
+        "task_end": 671542.623952167,
+        "status": "ok"
+      },
+      "63": {
+        "ticker": "CLOV",
+        "task_start": 671530.181337292,
+        "llm_start": 671530.18133925,
+        "llm_end": 671532.130017,
+        "task_end": 671532.130017,
+        "status": "ok"
+      },
+      "64": {
+        "ticker": "WISH",
+        "task_start": 671530.444341375,
+        "llm_start": 671530.444343125,
+        "llm_end": 671532.508343833,
+        "task_end": 671532.508343833,
+        "status": "ok"
+      },
+      "65": {
+        "ticker": "WKHS",
+        "task_start": 671530.444717167,
+        "llm_start": 671530.444717833,
+        "llm_end": 671532.734446542,
+        "task_end": 671532.734446542,
+        "status": "ok"
+      },
+      "66": {
+        "ticker": "BB",
+        "task_start": 671530.494744417,
+        "llm_start": 671530.494745792,
+        "llm_end": 671532.89985825,
+        "task_end": 671532.89985825,
+        "status": "ok"
+      },
+      "67": {
+        "ticker": "NOK",
+        "task_start": 671530.740545042,
+        "llm_start": 671530.740548917,
+        "llm_end": 671532.81079125,
+        "task_end": 671532.81079125,
+        "status": "ok"
+      },
+      "68": {
+        "ticker": "AMC",
+        "task_start": 671530.88223225,
+        "llm_start": 671530.882236208,
+        "llm_end": 671533.312412542,
+        "task_end": 671533.312412542,
+        "status": "ok"
+      },
+      "69": {
+        "ticker": "GME",
+        "task_start": 671530.904481875,
+        "llm_start": 671530.904486042,
+        "llm_end": 671532.8410065,
+        "task_end": 671532.8410065,
+        "status": "ok"
+      },
+      "70": {
+        "ticker": "BBBY",
+        "task_start": 671531.358976667,
+        "llm_start": 671531.358981042,
+        "llm_end": 671535.850457125,
+        "task_end": 671535.850457125,
+        "status": "ok"
+      },
+      "71": {
+        "ticker": "DKNG",
+        "task_start": 671532.135572417,
+        "llm_start": 671532.135573292,
+        "llm_end": 671534.45244625,
+        "task_end": 671534.45244625,
+        "status": "ok"
+      },
+      "72": {
+        "ticker": "PENN",
+        "task_start": 671532.178709917,
+        "llm_start": 671532.17871175,
+        "llm_end": 671534.78140125,
+        "task_end": 671534.78140125,
+        "status": "ok"
+      },
+      "73": {
+        "ticker": "MGM",
+        "task_start": 671532.350754417,
+        "llm_start": 671532.350758417,
+        "llm_end": 671534.258118667,
+        "task_end": 671534.258118667,
+        "status": "ok"
+      },
+      "74": {
+        "ticker": "WYNN",
+        "task_start": 671532.513668917,
+        "llm_start": 671532.513669958,
+        "llm_end": 671534.771903583,
+        "task_end": 671534.771903583,
+        "status": "ok"
+      },
+      "75": {
+        "ticker": "LVS",
+        "task_start": 671532.741377708,
+        "llm_start": 671532.741411208,
+        "llm_end": 671535.986604375,
+        "task_end": 671535.986604375,
+        "status": "ok"
+      },
+      "76": {
+        "ticker": "MAR",
+        "task_start": 671532.814943583,
+        "llm_start": 671532.814945208,
+        "llm_end": 671535.376223208,
+        "task_end": 671535.376223208,
+        "status": "ok"
+      },
+      "77": {
+        "ticker": "HLT",
+        "task_start": 671532.846893542,
+        "llm_start": 671532.846894542,
+        "llm_end": 671535.200108458,
+        "task_end": 671535.200108458,
+        "status": "ok"
+      },
+      "78": {
+        "ticker": "CCL",
+        "task_start": 671532.905139583,
+        "llm_start": 671532.90514025,
+        "llm_end": 671534.965358,
+        "task_end": 671534.965358,
+        "status": "ok"
+      },
+      "79": {
+        "ticker": "RCL",
+        "task_start": 671533.31688525,
+        "llm_start": 671533.316886625,
+        "llm_end": 671535.526686917,
+        "task_end": 671535.526686917,
+        "status": "ok"
+      },
+      "80": {
+        "ticker": "DAL",
+        "task_start": 671534.263026583,
+        "llm_start": 671534.263027375,
+        "llm_end": 671536.261773542,
+        "task_end": 671536.261773542,
+        "status": "ok"
+      },
+      "81": {
+        "ticker": "UAL",
+        "task_start": 671534.456431958,
+        "llm_start": 671534.456432792,
+        "llm_end": 671536.509867292,
+        "task_end": 671536.509867292,
+        "status": "ok"
+      },
+      "82": {
+        "ticker": "AAL",
+        "task_start": 671534.776907667,
+        "llm_start": 671534.776909,
+        "llm_end": 671537.15083275,
+        "task_end": 671537.15083275,
+        "status": "ok"
+      },
+      "83": {
+        "ticker": "BA",
+        "task_start": 671534.785897292,
+        "llm_start": 671534.785898792,
+        "llm_end": 671536.911679292,
+        "task_end": 671536.911679292,
+        "status": "ok"
+      },
+      "84": {
+        "ticker": "LMT",
+        "task_start": 671534.969562792,
+        "llm_start": 671534.9695635,
+        "llm_end": 671537.296057625,
+        "task_end": 671537.296057625,
+        "status": "ok"
+      },
+      "85": {
+        "ticker": "RTX",
+        "task_start": 671535.203906833,
+        "llm_start": 671535.20390825,
+        "llm_end": 671537.674720833,
+        "task_end": 671537.674720833,
+        "status": "ok"
+      },
+      "86": {
+        "ticker": "GE",
+        "task_start": 671535.380022625,
+        "llm_start": 671535.380024208,
+        "llm_end": 671537.391109958,
+        "task_end": 671537.391109958,
+        "status": "ok"
+      },
+      "87": {
+        "ticker": "CAT",
+        "task_start": 671535.535152292,
+        "llm_start": 671535.535153125,
+        "llm_end": 671537.787836125,
+        "task_end": 671537.787836125,
+        "status": "ok"
+      },
+      "88": {
+        "ticker": "DE",
+        "task_start": 671535.856547792,
+        "llm_start": 671535.856548958,
+        "llm_end": 671537.820245417,
+        "task_end": 671537.820245417,
+        "status": "ok"
+      },
+      "89": {
+        "ticker": "MMM",
+        "task_start": 671535.99067,
+        "llm_start": 671535.990670833,
+        "llm_end": 671538.05671175,
+        "task_end": 671538.05671175,
+        "status": "ok"
+      },
+      "90": {
+        "ticker": "HON",
+        "task_start": 671536.265962458,
+        "llm_start": 671536.265964,
+        "llm_end": 671538.409216167,
+        "task_end": 671538.409216167,
+        "status": "ok"
+      },
+      "91": {
+        "ticker": "SBUX",
+        "task_start": 671536.513738583,
+        "llm_start": 671536.513741875,
+        "llm_end": 671538.975818042,
+        "task_end": 671538.975818042,
+        "status": "ok"
+      },
+      "92": {
+        "ticker": "MCD",
+        "task_start": 671536.916246667,
+        "llm_start": 671536.916248,
+        "llm_end": 671539.645411667,
+        "task_end": 671539.645411667,
+        "status": "ok"
+      },
+      "93": {
+        "ticker": "YUM",
+        "task_start": 671537.154840625,
+        "llm_start": 671537.154844333,
+        "llm_end": 671539.678803792,
+        "task_end": 671539.678803792,
+        "status": "ok"
+      },
+      "94": {
+        "ticker": "CMG",
+        "task_start": 671537.301174833,
+        "llm_start": 671537.301176417,
+        "llm_end": 671540.016034583,
+        "task_end": 671540.016034583,
+        "status": "ok"
+      },
+      "95": {
+        "ticker": "DPZ",
+        "task_start": 671537.395861708,
+        "llm_start": 671537.395862625,
+        "llm_end": 671539.868981958,
+        "task_end": 671539.868981958,
+        "status": "ok"
+      },
+      "96": {
+        "ticker": "NKE",
+        "task_start": 671537.680638417,
+        "llm_start": 671537.680639208,
+        "llm_end": 671540.131639375,
+        "task_end": 671540.131639375,
+        "status": "ok"
+      },
+      "97": {
+        "ticker": "LULU",
+        "task_start": 671537.79526025,
+        "llm_start": 671537.795260875,
+        "llm_end": 671540.512026583,
+        "task_end": 671540.512026583,
+        "status": "ok"
+      },
+      "98": {
+        "ticker": "UAA",
+        "task_start": 671537.837569792,
+        "llm_start": 671537.837571292,
+        "llm_end": 671540.053767083,
+        "task_end": 671540.053767083,
+        "status": "ok"
+      },
+      "99": {
+        "ticker": "PVH",
+        "task_start": 671538.065876417,
+        "llm_start": 671538.0658775,
+        "llm_end": 671540.640889875,
+        "task_end": 671540.640889875,
+        "status": "ok"
+      },
+      "100": {
+        "ticker": "VFC",
+        "task_start": 671538.419452542,
+        "llm_start": 671538.419454167,
+        "llm_end": 671543.082904708,
+        "task_end": 671543.082904708,
+        "status": "ok"
+      },
+      "101": {
+        "ticker": "SQ",
+        "task_start": 671538.982465917,
+        "llm_start": 671538.982470083,
+        "llm_end": 671540.835088417,
+        "task_end": 671540.835088417,
+        "status": "ok"
+      },
+      "102": {
+        "ticker": "PYPL",
+        "task_start": 671539.651245792,
+        "llm_start": 671539.651247583,
+        "llm_end": 671541.8160925,
+        "task_end": 671541.8160925,
+        "status": "ok"
+      },
+      "103": {
+        "ticker": "AFRM",
+        "task_start": 671539.689114542,
+        "llm_start": 671539.68911575,
+        "llm_end": 671542.125556083,
+        "task_end": 671542.125556083,
+        "status": "ok"
+      },
+      "104": {
+        "ticker": "UPST",
+        "task_start": 671539.877091125,
+        "llm_start": 671539.877091917,
+        "llm_end": 671542.170480375,
+        "task_end": 671542.170480375,
+        "status": "ok"
+      },
+      "105": {
+        "ticker": "LC",
+        "task_start": 671540.020034417,
+        "llm_start": 671540.020035125,
+        "llm_end": 671542.3344195,
+        "task_end": 671542.3344195,
+        "status": "ok"
+      },
+      "106": {
+        "ticker": "OPEN",
+        "task_start": 671540.070707542,
+        "llm_start": 671540.070708708,
+        "llm_end": 671542.623952167,
+        "task_end": 671542.623952167,
+        "status": "ok"
+      },
+      "107": {
+        "ticker": "LADR",
+        "task_start": 671540.137659458,
+        "llm_start": 671540.13766025,
+        "llm_end": 671542.427444542,
+        "task_end": 671542.427444542,
+        "status": "ok"
+      },
+      "108": {
+        "ticker": "STWD",
+        "task_start": 671540.518062167,
+        "llm_start": 671540.518065208,
+        "llm_end": 671542.490339417,
+        "task_end": 671542.490339417,
+        "status": "ok"
+      },
+      "109": {
+        "ticker": "AGNC",
+        "task_start": 671540.646950583,
+        "llm_start": 671540.646954125,
+        "llm_end": 671542.888515208,
+        "task_end": 671542.888515208,
+        "status": "ok"
+      },
+      "110": {
+        "ticker": "NLY",
+        "task_start": 671540.83997125,
+        "llm_start": 671540.839972708,
+        "llm_end": 671543.308119375,
+        "task_end": 671543.308119375,
+        "status": "ok"
+      },
+      "111": {
+        "ticker": "O",
+        "task_start": 671541.820529333,
+        "llm_start": 671541.820530292,
+        "llm_end": 671543.994929417,
+        "task_end": 671543.994929417,
+        "status": "ok"
+      },
+      "112": {
+        "ticker": "SPG",
+        "task_start": 671542.130658583,
+        "llm_start": 671542.13066,
+        "llm_end": 671544.5224375,
+        "task_end": 671544.5224375,
+        "status": "ok"
+      },
+      "113": {
+        "ticker": "AMT",
+        "task_start": 671542.175589958,
+        "llm_start": 671542.17559375,
+        "llm_end": 671544.563844708,
+        "task_end": 671544.563844708,
+        "status": "ok"
+      },
+      "114": {
+        "ticker": "PLD",
+        "task_start": 671542.339725625,
+        "llm_start": 671542.339726667,
+        "llm_end": 671544.612018083,
+        "task_end": 671544.612018083,
+        "status": "ok"
+      },
+      "115": {
+        "ticker": "CCI",
+        "task_start": 671542.433666792,
+        "llm_start": 671542.433671542,
+        "llm_end": 671544.569325583,
+        "task_end": 671544.569325583,
+        "status": "ok"
+      },
+      "116": {
+        "ticker": "EQIX",
+        "task_start": 671542.495897583,
+        "llm_start": 671542.495898333,
+        "llm_end": 671544.756527708,
+        "task_end": 671544.756527708,
+        "status": "ok"
+      },
+      "117": {
+        "ticker": "PSA",
+        "task_start": 671542.630519667,
+        "llm_start": 671542.630521167,
+        "llm_end": 671544.694508333,
+        "task_end": 671544.694508333,
+        "status": "ok"
+      },
+      "118": {
+        "ticker": "EXR",
+        "task_start": 671542.8922115,
+        "llm_start": 671542.892212333,
+        "llm_end": 671545.422961458,
+        "task_end": 671545.422961458,
+        "status": "ok"
+      },
+      "119": {
+        "ticker": "AVB",
+        "task_start": 671543.088015417,
+        "llm_start": 671543.088018792,
+        "llm_end": 671545.482553458,
+        "task_end": 671545.482553458,
+        "status": "ok"
+      },
+      "120": {
+        "ticker": "EQR",
+        "task_start": 671543.312487208,
+        "llm_start": 671543.312488083,
+        "llm_end": 671545.768097833,
+        "task_end": 671545.768097833,
+        "status": "ok"
+      },
+      "121": {
+        "ticker": "NEE",
+        "task_start": 671543.998730083,
+        "llm_start": 671543.998730833,
+        "llm_end": 671546.163800875,
+        "task_end": 671546.163800875,
+        "status": "ok"
+      },
+      "122": {
+        "ticker": "DUK",
+        "task_start": 671544.526222875,
+        "llm_start": 671544.526223542,
+        "llm_end": 671546.580484917,
+        "task_end": 671546.580484917,
+        "status": "ok"
+      },
+      "123": {
+        "ticker": "SO",
+        "task_start": 671544.571373667,
+        "llm_start": 671544.571375167,
+        "llm_end": 671546.651121583,
+        "task_end": 671546.651121583,
+        "status": "ok"
+      },
+      "124": {
+        "ticker": "AEP",
+        "task_start": 671544.579834542,
+        "llm_start": 671544.579835625,
+        "llm_end": 671546.646966375,
+        "task_end": 671546.646966375,
+        "status": "ok"
+      },
+      "125": {
+        "ticker": "EXC",
+        "task_start": 671544.617299208,
+        "llm_start": 671544.617300333,
+        "llm_end": 671547.210932583,
+        "task_end": 671547.210932583,
+        "status": "ok"
+      },
+      "126": {
+        "ticker": "XEL",
+        "task_start": 671544.70232575,
+        "llm_start": 671544.7023265,
+        "llm_end": 671546.725231417,
+        "task_end": 671546.725231417,
+        "status": "ok"
+      },
+      "127": {
+        "ticker": "ED",
+        "task_start": 671544.771774667,
+        "llm_start": 671544.771777792,
+        "llm_end": 671547.550823042,
+        "task_end": 671547.550823042,
+        "status": "ok"
+      },
+      "128": {
+        "ticker": "FE",
+        "task_start": 671545.433819458,
+        "llm_start": 671545.4338205,
+        "llm_end": 671547.723164208,
+        "task_end": 671547.723164208,
+        "status": "ok"
+      },
+      "129": {
+        "ticker": "PCG",
+        "task_start": 671545.498991542,
+        "llm_start": 671545.498992167,
+        "llm_end": 671547.556670583,
+        "task_end": 671547.556670583,
+        "status": "ok"
+      },
+      "130": {
+        "ticker": "SRE",
+        "task_start": 671545.773581,
+        "llm_start": 671545.773584458,
+        "llm_end": 671551.605318375,
+        "task_end": 671551.605318375,
+        "status": "ok"
+      },
+      "131": {
+        "ticker": "AMGN",
+        "task_start": 671546.1678565,
+        "llm_start": 671546.167857167,
+        "llm_end": 671548.147176875,
+        "task_end": 671548.147176875,
+        "status": "ok"
+      },
+      "132": {
+        "ticker": "GILD",
+        "task_start": 671546.585046833,
+        "llm_start": 671546.585056917,
+        "llm_end": 671549.106463875,
+        "task_end": 671549.106463875,
+        "status": "ok"
+      },
+      "133": {
+        "ticker": "BIIB",
+        "task_start": 671546.653632833,
+        "llm_start": 671546.653634,
+        "llm_end": 671549.911916125,
+        "task_end": 671549.911916125,
+        "status": "ok"
+      },
+      "134": {
+        "ticker": "REGN",
+        "task_start": 671546.658201458,
+        "llm_start": 671546.658202375,
+        "llm_end": 671548.714601833,
+        "task_end": 671548.714601833,
+        "status": "ok"
+      },
+      "135": {
+        "ticker": "VRTX",
+        "task_start": 671546.7374225,
+        "llm_start": 671546.737424208,
+        "llm_end": 671548.60663275,
+        "task_end": 671548.60663275,
+        "status": "ok"
+      },
+      "136": {
+        "ticker": "ILMN",
+        "task_start": 671547.215152333,
+        "llm_start": 671547.215153167,
+        "llm_end": 671549.360834333,
+        "task_end": 671549.360834333,
+        "status": "ok"
+      },
+      "137": {
+        "ticker": "IQV",
+        "task_start": 671547.555633125,
+        "llm_start": 671547.555633792,
+        "llm_end": 671550.520680417,
+        "task_end": 671550.520680417,
+        "status": "ok"
+      },
+      "138": {
+        "ticker": "TMO",
+        "task_start": 671547.561307417,
+        "llm_start": 671547.561308333,
+        "llm_end": 671549.6584765,
+        "task_end": 671549.6584765,
+        "status": "ok"
+      },
+      "139": {
+        "ticker": "DHR",
+        "task_start": 671547.729477917,
+        "llm_start": 671547.729479417,
+        "llm_end": 671550.122271917,
+        "task_end": 671550.122271917,
+        "status": "ok"
+      },
+      "140": {
+        "ticker": "ABT",
+        "task_start": 671548.151407542,
+        "llm_start": 671548.151408917,
+        "llm_end": 671550.559056333,
+        "task_end": 671550.559056333,
+        "status": "ok"
+      },
+      "141": {
+        "ticker": "BRK-B",
+        "task_start": 671548.610714625,
+        "llm_start": 671548.6107155,
+        "llm_end": 671550.787897792,
+        "task_end": 671550.787897792,
+        "status": "ok"
+      },
+      "142": {
+        "ticker": "V",
+        "task_start": 671548.718723458,
+        "llm_start": 671548.718724208,
+        "llm_end": 671551.402274708,
+        "task_end": 671551.402274708,
+        "status": "ok"
+      },
+      "143": {
+        "ticker": "MA",
+        "task_start": 671549.111571417,
+        "llm_start": 671549.111572667,
+        "llm_end": 671551.425182792,
+        "task_end": 671551.425182792,
+        "status": "ok"
+      },
+      "144": {
+        "ticker": "UNH",
+        "task_start": 671549.365645625,
+        "llm_start": 671549.365646333,
+        "llm_end": 671551.928362417,
+        "task_end": 671551.928362417,
+        "status": "ok"
+      },
+      "145": {
+        "ticker": "HD",
+        "task_start": 671549.662183958,
+        "llm_start": 671549.662184875,
+        "llm_end": 671551.912866042,
+        "task_end": 671551.912866042,
+        "status": "ok"
+      },
+      "146": {
+        "ticker": "PG",
+        "task_start": 671549.915660917,
+        "llm_start": 671549.915661792,
+        "llm_end": 671553.3743525,
+        "task_end": 671553.3743525,
+        "status": "ok"
+      },
+      "147": {
+        "ticker": "KO",
+        "task_start": 671550.126598375,
+        "llm_start": 671550.126599792,
+        "llm_end": 671552.204660958,
+        "task_end": 671552.204660958,
+        "status": "ok"
+      },
+      "148": {
+        "ticker": "PEP",
+        "task_start": 671550.526171208,
+        "llm_start": 671550.526173083,
+        "llm_end": 671552.925919333,
+        "task_end": 671552.925919333,
+        "status": "ok"
+      },
+      "149": {
+        "ticker": "MRK",
+        "task_start": 671550.568303625,
+        "llm_start": 671550.568304292,
+        "llm_end": 671554.21035,
+        "task_end": 671554.21035,
+        "status": "ok"
+      },
+      "150": {
+        "ticker": "CSCO",
+        "task_start": 671550.792301167,
+        "llm_start": 671550.792302583,
+        "llm_end": 671553.35626375,
+        "task_end": 671553.35626375,
+        "status": "ok"
+      }
+    }
+  }
+}

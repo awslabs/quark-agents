@@ -182,7 +182,7 @@ results = await reactor.run(tasks)
 At 150 stocks with `llm_concurrency=35` against AWS Bedrock: **150/150 completed, zero failures, 22s**.
 Plain `asyncio.gather` on the same workload: 75/150 completed, 75 throttled.
 
-See [benchmarks/](benchmarks/) for the full multi-framework comparison.
+See [benchmarks/RESULTS.md](benchmarks/RESULTS.md) for the full multi-framework comparison including Ray distributed results.
 
 ### Observability (OpenTelemetry)
 

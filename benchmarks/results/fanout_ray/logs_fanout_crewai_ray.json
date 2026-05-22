@@ -1,0 +1,38 @@
+[
+  {
+    "framework": "crewai",
+    "batch_size": 100,
+    "llm_calls_total": 400,
+    "n_success": 100,
+    "n_failed": 0,
+    "wall_time_s": 48.054,
+    "throughput": 2.081
+  },
+  {
+    "framework": "crewai",
+    "batch_size": 250,
+    "llm_calls_total": 1000,
+    "n_success": 250,
+    "n_failed": 0,
+    "wall_time_s": 92.703,
+    "throughput": 2.6968
+  },
+  {
+    "framework": "crewai",
+    "batch_size": 500,
+    "llm_calls_total": 2000,
+    "n_success": 500,
+    "n_failed": 0,
+    "wall_time_s": 176.625,
+    "throughput": 2.8309
+  },
+  {
+    "framework": "crewai",
+    "batch_size": 1000,
+    "llm_calls_total": 4000,
+    "n_success": 1000,
+    "n_failed": 0,
+    "wall_time_s": 343.819,
+    "throughput": 2.9085
+  }
+]
